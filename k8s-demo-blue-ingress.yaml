@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: k8s-demo-blue-green
+    app.kubernetes.io/name: k8s-demo-blue-green-ingress
+    app.kubernetes.io/component: server
+  name: k8s-demo-blue-green-ingress
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: k8s-demo-blue-green.internal
+      http:
+        paths:
+          - backend:
+              service:
+                name: k8s-demo-blue-svc
+                port:
+                  name: http
+            path: /
+            pathType: Prefix

@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-demo-blue
+  labels:
+    app: k8s-demo-blue
+    app.kubernetes.io/name: k8s-demo-blue
+    app.kubernetes.io/component: server
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: k8s-demo-blue
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: k8s-demo-blue
+        app.kubernetes.io/name: k8s-demo-blue
+        app.kubernetes.io/component: server
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/stefan-niemeyer/k8s-demo/k8s-demo:blue
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              name: http-app
+              protocol: TCP
+          volumeMounts:
+            - name: npm-logs
+              mountPath: /home/node/.npm
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          readinessProbe:
+            failureThreshold: 1
+            httpGet:
+              path: /ready
+              port: 3000
+              scheme: HTTP
+            periodSeconds: 10
+            initialDelaySeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            requests:
+              cpu: 7m
+              memory: 200Mi
+            limits:
+              cpu: 100m
+              memory: 1024Mi
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            privileged: false
+            runAsNonRoot: true
+      enableServiceLinks: false
+      volumes:
+        - name: npm-logs
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-demo-blue-svc
+  labels:
+    app: k8s-demo-blue
+    app.kubernetes.io/name: k8s-demo-blue-svc
+    app.kubernetes.io/component: server
+spec:
+  selector:
+    app: k8s-demo-blue
+  ports:
+    - port: 80
+      name: http
+      targetPort: http-app

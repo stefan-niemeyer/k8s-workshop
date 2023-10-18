@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: k8s-demo-vx
+    app.kubernetes.io/name: k8s-demo-vx-ingress
+    app.kubernetes.io/component: server
+  name: k8s-demo-vx-ingress
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: k8s-demo-vx.internal
+      http:
+        paths:
+          - backend:
+              service:
+                name: k8s-demo-vx-svc
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
