@@ -1,0 +1,21 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  labels:
+    app: k8s-demo-canary
+    app.kubernetes.io/name: k8s-demo-canary-ingress-route
+    app.kubernetes.io/component: server
+  name: k8s-demo-canary-ingress-route
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`k8s-demo-canary.internal`)
+      kind: Rule
+      services:
+        - name: k8s-demo-vx-svc
+          port: http
+          weight: 80  # 80% der Anfragen an k8s-demo-vx-svc
+        - name: k8s-demo-canary-svc
+          port: http
+          weight: 20  # 10% der Anfragen an k8s-demo-canary-svc
