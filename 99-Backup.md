@@ -6,6 +6,10 @@ Für die Installation benötigt man `sudo`-Rechte.
 ```shell
 curl -sfL https://get.k3s.io | sudo sh -
 ```
+`git` installieren
+```shell
+sudo apt install git
+```
 
 Im Workshop verwendete Hostnamen auf localhost zeigen lassen.
 ```shell
@@ -23,10 +27,10 @@ Mit der Zugangsdatei hat man die vollen Admin-Rechte auf die K3s-Installation.
 
 ```shell
 $ cd
-$ kdir .kube
+$ mkdir .kube
 $ cd .kube
 $ sudo cp /etc/rancher/k3s/k3s.yaml config
-$ sudo chown $(whoami) config
+$ sudo chown k3s:k3s config
 $ cd
 $ nano .bashrc
 ```
