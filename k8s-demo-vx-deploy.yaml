@@ -40,7 +40,7 @@ spec:
             failureThreshold: 3
             httpGet:
               path: /health
-              port: 3000
+              port: http-app
               scheme: HTTP
             initialDelaySeconds: 10
             periodSeconds: 10
@@ -50,7 +50,7 @@ spec:
             failureThreshold: 1
             httpGet:
               path: /ready
-              port: 3000
+              port: http-app
               scheme: HTTP
             periodSeconds: 10
             initialDelaySeconds: 5
@@ -69,6 +69,7 @@ spec:
             privileged: false
             runAsNonRoot: true
       enableServiceLinks: false
+      automountServiceAccountToken: false
       volumes:
         - name: npm-logs
           emptyDir: {}

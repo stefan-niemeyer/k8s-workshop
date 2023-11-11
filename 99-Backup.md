@@ -19,6 +19,12 @@ Folgende Zeile einfügen
 ```shell
 127.0.0.1 k8s-demo-vx.internal k8s-demo-blue-green.internal k8s-demo-canary.internal
 ```
+## Aussprache von kubernetes und kubectl
+Kubernetes -> coo-ber-ne-ees
+kubectl -> cube control
+
+Quelle https://github.com/kubernetes/kubernetes/blob/release-1.9/CHANGELOG-1.9.md
+
 ## Authentifizierung für normalen Benutzer einrichten
 
 Die Zugangsinformationen für `kubectl` liegen unter `/etc/rancher/k3s/k3s.yaml`. Die Datei kopieren wir in das Home-Verzeichnis des normalen Benutzers und ändern die Rechte.
