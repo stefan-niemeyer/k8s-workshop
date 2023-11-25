@@ -8,223 +8,252 @@
 
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+		<link rel="stylesheet" href="dist/theme/black.css" id="theme">
 
 		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+		<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
 	</head>
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>
-					<h1>Kubernetes Workshop</h1>
-				</section>
-				<section>
-					<h2>Workshop Inhalt</h2>
-					<p class="fragment">Wie kann eine Anwendung resilient betrieben werden, damit sie auch nach Abstürzen weiterhin verfügbar ist?</p>
-					<p class="fragment">#DevOps #YouBuildItYouRunIt</p>
-					<br>
-					<p class="fragment">Kennenlernen von drei Deployment-Strategien, Rolling Update, Blue/Green und Canary Deployment</p>
-				</section>
-				<section>
-					<img src="./assets/deployment-strategien-meme.gif">
-				</section>
-				<section>
-					<h2>Quellen</h2>
-					<p>Learn Kubernetes</p>
-					<p style="font-size:1.5rem;"><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/" target="_blank">https://kubernetes.io/docs/tutorials/kubernetes-basics/</a></p>
+				<section data-markdown>
+					# Kubernetes Workshop
 				</section>
 
 				<section>
-					<h1>Installation und Wartung</h1>
-				</section>
-				<section>
-					<h2>Ausgangssituation</h2>
-					<p>Anwendung läuft auf Server.<br>Sie benötigt ein Betriebssystem, Bibliotheken (z.B. für DB-Zugriff)
-						und evtl. Laufzeitumgebungen wie Java Runtime, Node.JS, Python, ...</p>
-				</section>
-				<section>
-					<h2>Installation</h2>
-					<ul>
-						<li>Betriebssystem, Bibliotheken und Laufzeitumgebungen</li>
-						<li>Anwendung selbst</li>
-						<li>Die notwendigen Schritte müssen exakt ausgeführt werden oder automatisiert werden, z.B. mit Ansible</li>
-					</ul>
-				</section>
-				<section>
-					<h2>Herausforderungen</h2>
-					<ul>
-						<li class="fragment">Bei so vielen Komponenten kann ein Versionsunterschied oder eine Abweichung bei der Installation dazu führen, dass die Anwendung nicht mehr läuft</li>
-						<li class="fragment">Auf dem Server laufen evtl. weitere Anwendungen, wodurch Konflikte entstehen könnten</li>
-						<li class="fragment">Als Entwickler*in möchte ich die Anwendung auf meinem Rechner installieren können, um sie zu testen</li>
-					</ul>
-				</section>
-				<section>
-					<h2>Wartungsaufgaben</h2>
-					<ul>
-						<li class="fragment">Updates oder Security-Patches (OS, Libs, Runtime, App) müssen regelmäßig installiert werden</li>
-						<li class="fragment">Die Updates sollen während des Betriebs installiert werden, ohne dass die Anwendung ausfällt</li>
-					</ul>
+					<section id="inhalt">
+						<h2>Workshop Inhalt</h2>
+						<p class="fragment">Wie kann eine Anwendung resilient betrieben werden, damit sie auch nach Abstürzen weiterhin verfügbar ist?</p>
+						<p class="fragment">#DevOps #YouBuildItYouRunIt</p>
+						<br>
+						<p class="fragment">Kennenlernen von drei Deployment-Strategien, Rolling Update, Blue/Green und Canary Deployment</p>
+					</section>
+					<section data-menu-title="Confused Dog Meme">
+						<img src="./assets/deployment-strategien-meme.gif" alt="Deployment Strategien Meme">
+					</section>
+					<section>
+						<h2>Quellen</h2>
+						<p>Learn Kubernetes</p>
+						<p style="font-size:1.5rem;"><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/" target="_blank">https://kubernetes.io/docs/tutorials/kubernetes-basics/</a></p>
+					</section>
 				</section>
 
 				<section>
-					<h1>Lösungsbausteine</h1>
-				</section>
-				<section>
-					<h2>Images / Container</h2>
-					<ul>
-						<li class="fragment">Alle benötigten Dateien sollen unveränderlich *eingefroren* werden</li>
-						<li class="fragment">Images enthalten alle notwendigen Komponenten, um die Anwendung auszuführen. Sie sind unveränderlich, wie ISO-Images (Security)</li>
-						<li class="fragment">Images sind Vorlagen für die Erstellung von Containern</li>
-						<li class="fragment">Container sind leichtgewichtige, portable Einheiten für Software ...</li>
-						<li class="fragment">und von der zugrundeliegenden Infrastruktur isoliert</li>
-					</ul>
-				</section>
-				<section>
-					<h2>VM vs Container</h2>
-					<img src="https://nesi.github.io/nzrse-containers/fig/container_vs_vm.png">
+					<section data-markdown>
+						# Installation und Wartung
+					</section>
+					<section data-markdown>
+						## Ausgangssituation
+
+						Anwendung läuft auf Server.
+
+						Sie benötigt ein Betriebssystem, Bibliotheken (z.B. für DB-Zugriff)
+						und evtl. Laufzeitumgebungen wie Java Runtime, Node.JS, Python, ...
+					</section>
+					<section data-markdown>
+						##  Installation
+
+						- Betriebssystem, Bibliotheken und Laufzeitumgebungen
+						- Anwendung selbst
+						- Die notwendigen Schritte müssen exakt ausgeführt werden oder automatisiert werden, z.B. mit Ansible
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Herausforderungen
+							- Bei so vielen Komponenten kann ein Versionsunterschied oder eine Abweichung bei der Installation dazu führen, dass die Anwendung nicht mehr läuft <!-- .element: class="fragment" -->
+							- Auf dem Server laufen evtl. weitere Anwendungen, wodurch Konflikte entstehen könnten <!-- .element: class="fragment" -->
+							- Als Entwickler*in möchte ich die Anwendung auf meinem Rechner installieren können, um sie zu testen <!-- .element: class="fragment" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Wartungsaufgaben
+							- Updates oder Security-Patches (OS, Libs, Runtime, App) müssen regelmäßig installiert werden <!-- .element: class="fragment" -->
+							- Die Updates sollen während des Betriebs installiert werden, ohne dass die Anwendung ausfällt <!-- .element: class="fragment" -->
+						</script>
+					</section>
 				</section>
 
 				<section>
-					<h1>Setup</h1>
+					<section data-markdown>
+						# Lösungsbausteine
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Images / Container
+							- Alle benötigten Dateien sollen unveränderlich 'eingefroren' werden <!-- .element: class="fragment" -->
+							- Images enthalten alle notwendigen Komponenten, um die Anwendung auszuführen. Sie sind unveränderlich, wie ISO-Images (Security) <!-- .element: class="fragment" -->
+							- Images sind Vorlagen für die Erstellung von Containern <!-- .element: class="fragment" -->
+							- Container sind leichtgewichtige, portable Einheiten für Software ... <!-- .element: class="fragment" -->
+							- und von der zugrundeliegenden Infrastruktur isoliert <!-- .element: class="fragment" -->
+						</script>
+					</section>
+					<section>
+						<h2>VM vs Container</h2>
+						<img src="https://nesi.github.io/nzrse-containers/fig/container_vs_vm.png" alt="Container vs VM">
+					</section>
 				</section>
 
 				<section>
-					<p>git installiert?</p>
-					<pre data-id="code-animation"><code class="language-console" data-trim>
-						$ sudo apt install git
-					</code></pre>
-					<div class="fragment">
-						<p>Workshop-Repo klonen</p>
-						<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-							$ git clone https://github.com/stefan-niemeyer/k8s-workshop.git
-						</code></pre>
-					</div>
-				</section>
-				<section>
-					<p>K8s Rechte kopieren</p>
-					<pre data-id="code-animation"><code class="language-console" data-trim>
-						$ cd
-						$ mkdir .kube
-						$ cd .kube
-						$ sudo cp /etc/rancher/k3s/k3s.yaml config
-						$ sudo chown k3s:k3s config
-						$ cd
-					</code></pre>
-				</section>
-				<section>
-					<p>.bashrc erweitern</p>
-					<pre data-id="code-animation"><code class="language-console" data-trim>
-						$ nano .bashrc
-					</code></pre>
-					<div class="fragment">
-						<p>Zeilen eintragen</p>
-						<pre data-id="code-animation"><code class="language-bash" data-trim>
-							export KUBECONFIG=$HOME/.kube/config
-							alias k=kubectl
+					<section data-markdown id="setup">
+						# Setup
+					</section>
+					<section data-menu-title="git">
+						<p>git installiert?</p>
+						<pre data-id="code-animation"><code class="language-console" data-trim>
+							$ sudo apt install git
 						</code></pre>
 						<div class="fragment">
-							<p>Neuer Tab oder .bashrc neu laden</p>
-							<pre data-id="code-animation"><code class="language-console" data-trim>
-								$ source .bashrc
+							<p>Workshop-Repo klonen</p>
+							<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+								$ git clone https://github.com/stefan-niemeyer/k8s-workshop.git
 							</code></pre>
 						</div>
-					</div>
-				</section>
-				<section>
-					<h2>Namespace anlegen</h2>
-					<pre data-id="code-animation"><code class="language-console" data-trim>
-						# Namespace anlegen
-						$ kubectl create namespace workshop
-
-						# Namespace als Standard setzen
-						$ k config set-context --current --namespace=workshop
-					</code></pre>
-				</section>
-				<section>
-					<h2>Pod Starten</h2>
-					<pre data-id="code-animation"><code class="language-console" data-trim>
-						# Anwendung starten
-						$ k run demo --restart=Never \
-						        --image ghcr.io/stefan-niemeyer/k8s-demo/k8s-demo:v1
-					</code></pre>
-					<p style="font-size: 1.5rem">Repo unter <a href="https://github.com/stefan-niemeyer/k8s-demo" target="_blank">https://github.com/stefan-niemeyer/k8s-demo</a></p>
-					<div class="fragment">
+					</section>
+					<section>
+						<h4>K8s Rechte kopieren</h4>
 						<pre data-id="code-animation"><code class="language-console" data-trim>
-							# Logs anschauen
-							$ k logs -f demo
+							$ cd
+							$ mkdir .kube
+							$ cd .kube
+							$ sudo cp /etc/rancher/k3s/k3s.yaml config
+							$ sudo chown k3s:k3s config
+							$ cd
 						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-							# Shell im Pod ausführen
-							$ k exec -it demo -- bash
-							# Anwendung aufrufen
-							$ curl -w " -> %{response_code}\n" http://localhost:3000/state
-						</code></pre>
-					</div>
-					<div class="r-stack">
-						<pre class="fragment" style="font-size:1.4rem;" data-id="code-animation"><code class="language-console" data-trim>
-							# Anwendung abstürzen lassen
-							$ curl -w " -> %{response_code}\n" http://localhost:3000/error
-						</code><br><br></pre>
-						<pre class="fragment" style="font-size:1.4rem;" data-id="code-animation"><code class="language-console" data-trim>
-							# Anwendung abstürzen lassen
-							$ curl -w " -> %{response_code}\n" http://localhost:3000/error
-							{"status":"Unexpected Error Occurred"} -> 500
-							demo:/app$ command terminated with exit code 137
-						</code></pre>
-					</div>
-				</section>
-				<section>
-					<h2>Pod aufräumen</h2>
-					<pre data-id="code-animation"><code class="language-console" data-trim>
-						# Pods anzeigen
-						$ k get pod
-						NAME   READY   STATUS   RESTARTS   AGE
-						demo   0/1     Error    0          9m42s
-					</code></pre>
-					<div class="fragment">
+					</section>
+					<section data-menu-title="bashrc erweitern">
+						<p>.bashrc erweitern</p>
 						<pre data-id="code-animation"><code class="language-console" data-trim>
-							# Pod löschen
-							$ k delete pod demo
+							$ nano .bashrc
 						</code></pre>
-					</div>
-				</section>
-				<section>
-					<h2>Probleme?</h2>
-					<p class="fragment">Nach dem Abstürzen der Anwendung steht sie nicht mehr zur Verfügung</p>
-				</section>
-				<section>
-					<h2>Lösungen?</h2>
-					<ul>
-						<li class="fragment">Was muss getan werden, damit die Anwendung wieder verfügbar ist?</li>
-						<li class="fragment">Wie kann man diese Schritte automatisieren?</li>
-					</ul>
+						<div class="fragment">
+							<p>Zeilen eintragen</p>
+							<pre data-id="code-animation"><code class="language-bash" data-trim>
+								export KUBECONFIG=$HOME/.kube/config
+								alias k=kubectl
+							</code></pre>
+							<div class="fragment">
+								<p>Neuer Tab oder .bashrc neu laden</p>
+								<pre data-id="code-animation"><code class="language-console" data-trim>
+									$ source .bashrc
+								</code></pre>
+							</div>
+						</div>
+					</section>
 				</section>
 
 				<section>
-					<img src="./assets/kubernetes-cool-dude.gif">
-					<p>Aussprache -> coo-ber-net-ees</p>
-					<p style="font-size:1.5rem;"><a href="https://www.youtube.com/watch?v=uMA7qqXIXBk" target="_blank">https://www.youtube.com/watch?v=uMA7qqXIXBk</a></p>
+					<section id="showtime-pods">
+						<h1>Showtime Pods</h1>
+					</section>
+					<section>
+						<h2>Namespace anlegen</h2>
+						<pre data-id="code-animation"><code class="language-console" data-trim>
+							# Namespace anlegen
+							$ kubectl create namespace workshop
+
+							# Namespace als Standard setzen
+							$ k config set-context --current --namespace=workshop
+						</code></pre>
+					</section>
+					<section>
+						<h2>Pod Starten</h2>
+						<pre data-id="code-animation"><code class="language-console" data-trim>
+							# Anwendung starten
+							$ k run demo --restart=Never \
+									--image ghcr.io/stefan-niemeyer/k8s-demo/k8s-demo:v1
+						</code></pre>
+						<p style="font-size: 1.5rem">Repo unter <a href="https://github.com/stefan-niemeyer/k8s-demo" target="_blank">https://github.com/stefan-niemeyer/k8s-demo</a></p>
+						<div class="fragment">
+							<pre data-id="code-animation"><code class="language-console" data-trim>
+								# Logs anschauen
+								$ k logs -f demo
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+								# Shell im Pod ausführen
+								$ k exec -it demo -- bash
+								# Anwendung aufrufen
+								$ curl -w " -> %{response_code}\n" http://localhost:3000/state
+							</code></pre>
+						</div>
+						<div class="r-stack">
+							<pre class="fragment" style="font-size:1.4rem;" data-id="code-animation"><code class="language-console" data-trim>
+								# Anwendung abstürzen lassen
+								$ curl -w " -> %{response_code}\n" http://localhost:3000/error
+							</code><br><br></pre>
+							<pre class="fragment" style="font-size:1.4rem;" data-id="code-animation"><code class="language-console" data-trim>
+								# Anwendung abstürzen lassen
+								$ curl -w " -> %{response_code}\n" http://localhost:3000/error
+								{"status":"Unexpected Error Occurred"} -> 500
+								demo:/app$ command terminated with exit code 137
+							</code></pre>
+						</div>
+					</section>
+					<section>
+						<h2>Pod aufräumen</h2>
+						<pre data-id="code-animation"><code class="language-console" data-trim>
+							# Pods anzeigen
+							$ k get pod
+							NAME   READY   STATUS   RESTARTS   AGE
+							demo   0/1     Error    0          9m42s
+						</code></pre>
+						<div class="fragment">
+							<pre data-id="code-animation"><code class="language-console" data-trim>
+								# Pod löschen
+								$ k delete pod demo
+							</code></pre>
+						</div>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Gelöst
+							- Installation ist automatisiert und einfach
+							- Umgebung im Pod ist geschützt (Security)
+							- Isolation von anderen Anwendungen
+							- Anwendung kann lokal gestartet werden (je nach Abhängigkeiten)
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Offene Probleme
+							Nach dem Abstürzen der Anwendung steht sie nicht mehr zur Verfügung <!-- .element: class="fragment" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Fehlende Lösungen
+							Was muss getan werden, damit die Anwendung wieder verfügbar ist? <!-- .element: class="fragment" -->
+
+							Wie kann man diese Schritte automatisieren? <!-- .element: class="fragment" -->
+						</script>
+					</section>
+					<section data-menu-title="K8s Meme">
+						<img src="./assets/kubernetes-cool-dude.gif" alt="K8s Cool Dude">
+						<p>Aussprache -> coo-ber-net-ees</p>
+						<p style="font-size:1.5rem;"><a href="https://www.youtube.com/watch?v=uMA7qqXIXBk" target="_blank">https://www.youtube.com/watch?v=uMA7qqXIXBk</a></p>
+					</section>
 				</section>
+
 				<section>
-					<h2>Deployment</h2>
-					<ul>
-						<li class="fragment">Kümmert sich um das Vorhandensein einer definierten Anzahl von Pods (`spec.replicas`)</li>
-						<li class="fragment">Gewünschte Anzahl an Pods wird über eine ReplicaSet sichergestellt</li>
-						<li class="fragment">Ein Deployment hat eine Versionsverwaltung</li>
-					</ul>
-				</section>
-				<section>
-					<h2>kubectl</h2>
-					<p>Zugriff auf den Cluster per CLI</p>
-					<p><q>The canonical pronunciation of kubectl<br>is "cube control"</q></p>
-					<p style="font-size:1.5rem;"><a href="https://github.com/kubernetes/kubernetes/blob/release-1.9/CHANGELOG-1.9.md" target="_blank">https://github.com/kubernetes/kubernetes/blob/release-1.9/CHANGELOG-1.9.md</a></p>
-				</section>
-				<section>
-					<h2>Deployment Manifest</h2>
-					<pre data-id="code-animation"><code data-line-numbers="2,4|11|28-30|33-34" data-trim>
+					<section data-markdown id="deployment">
+						<script type="text/template">
+							## Deployment
+							- Kümmert sich um das Vorhandensein einer definierten Anzahl von Pods <!-- .element: class="fragment" -->
+							- Gewünschte Anzahl an Pods wird über eine ReplicaSet sichergestellt <!-- .element: class="fragment" -->
+							- Ein Deployment hat eine Versionsverwaltung <!-- .element: class="fragment" -->
+						</script>
+					</section>
+					<section>
+						<h2>kubectl</h2>
+						<p>Zugriff auf den Cluster per CLI</p>
+						<p><q>The canonical pronunciation of kubectl<br>is "cube control"</q></p>
+						<p style="font-size:1.5rem;"><a href="https://github.com/kubernetes/kubernetes/blob/release-1.9/CHANGELOG-1.9.md" target="_blank">https://github.com/kubernetes/kubernetes/blob/release-1.9/CHANGELOG-1.9.md</a></p>
+					</section>
+					<section>
+						<h2>Deployment Manifest</h2>
+						<pre data-id="code-animation"><code data-line-numbers="2,4|11|28-30|33-34" data-trim>
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -300,115 +329,127 @@ spec:
       volumes:
         - name: npm-logs
           emptyDir: {}
-					</code></pre>
-				</section>
-				<section>
-					<h2>Arbeiten mit dem Deployment</h2>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-							# Deployment anlegen
-							$ k apply -f k8s-demo-vx-deploy.yaml
-							deployment.apps/k8s-demo-vx created
 						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-							# Deployment anzeigen
-							$ k get deployments -w
-							NAME          READY   UP-TO-DATE   AVAILABLE   AGE
-							k8s-demo-vx   0/1     1            0           17s
-							k8s-demo-vx   1/1     1            1           21s
-							# Mit Strg-C beenden
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-							# Name des Pods in Umgebungsvariable speichern
-							$ export POD_NAME=$(kubectl get pods \
-							                      -l app=k8s-demo-vx \
-							                      -o jsonpath='{.items[*].metadata.name}')
-						</code></pre>
-					</div>
-				</section>
-				<section>
-					<h2>Arbeiten mit dem Pod</h2>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-							# Befehl im Pod ausführen
-							$ k exec "$POD_NAME" -- env
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-							# Shell im Pod öffnen
-							$ k exec -ti $POD_NAME -- bash
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-							# Im Pod (Der Prompt sieht anders aus)
-							$ ps
-							$ cat src/server.js
-							$ curl -w " -> %{response_code}\n" http://localhost:3000/state
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-							# Shell im Pod beenden
-							$ exit
-						</code></pre>
-					</div>
-				</section>
-				<section>
-					<h2>Pod Neustart</h2>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
-							$ k get pods -o wide -w
-							NAME                           READY   STATUS    RESTARTS   AGE     IP
-							k8s-demo-vx-5dccdc4db6-4km5w   1/1     Running   0          4m56s   10.42.0.15
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
-							# In anderem Tab
-							$ export POD_NAME="$(kubectl get pods -l app=k8s-demo-vx -o jsonpath='{.items[*].metadata.name}')"
-							$ k exec -ti $POD_NAME -- curl -w " -> %{response_code}\n" http://localhost:3000/error
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# Neue Ausgabe von: kubectl get pods -o wide -w
-							NAME                           READY   STATUS    RESTARTS      AGE
-							k8s-demo-vx-5dccdc4db6-4km5w   1/1     Running   0             4m56s
-							k8s-demo-vx-5dccdc4db6-4km5w   0/1     Error     0             6m45s
-							k8s-demo-vx-5dccdc4db6-4km5w   0/1     Running   1 (2s ago)    6m46s
-							k8s-demo-vx-5dccdc4db6-4km5w   1/1     Running   1 (17s ago)   7m1s
-						</code></pre>
-					</div>
-				</section>
-				<section>
-					<h2>Lösungen</h2>
-					<ul>
-						<li>Der Pod (die Anwendung) wird im Fehlerfall automatisch neu gestartet</li>
-						<li>Es gibt allerdings eine kurze Ausfallzeit</li>
-					</ul>
-				</section>
-				<section>
-					<h2>Probleme?</h2>
-					<ul>
-						<li>Der Pod ist von außen noch nicht verfügbar</li>
-						<li>Der Name des Pods nicht stabil<br>
-						    Wenn der Pod gelöscht wird, bekommt der Neue einen anderen Namen</li>
-					</ul>
-				</section>
-				<section>
-					<h2>Lösungen?</h2>
-					<p>Wie kann die Anwendung von außerhalb des Clusters aufgerufen werden?</p>
+					</section>
+					<section>
+						<h2>Arbeiten mit dem Deployment</h2>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+								# Deployment anlegen
+								$ k apply -f k8s-demo-vx-deploy.yaml
+								deployment.apps/k8s-demo-vx created
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+								# Deployment anzeigen
+								$ k get deployments -w
+								NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+								k8s-demo-vx   0/1     1            0           17s
+								k8s-demo-vx   1/1     1            1           21s
+								# Mit Strg-C beenden
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+								# Name des Pods in Umgebungsvariable speichern
+								$ export POD_NAME=$(kubectl get pods \
+													  -l app=k8s-demo-vx \
+													  -o jsonpath='{.items[*].metadata.name}')
+							</code></pre>
+						</div>
+					</section>
+					<section>
+						<h2>Arbeiten mit dem Pod</h2>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+								# Befehl im Pod ausführen
+								$ k exec "$POD_NAME" -- env
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+								# Shell im Pod öffnen
+								$ k exec -ti $POD_NAME -- bash
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+								# Im Pod (Der Prompt sieht anders aus)
+								$ ps
+								$ cat src/server.js
+								$ curl -w " -> %{response_code}\n" http://localhost:3000/state
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+								# Shell im Pod beenden
+								$ exit
+							</code></pre>
+						</div>
+					</section>
+					<section>
+						<h2>Pod Neustart</h2>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
+								$ k get pods -o wide -w
+								NAME                           READY   STATUS    RESTARTS   AGE     IP
+								k8s-demo-vx-5dccdc4db6-4km5w   1/1     Running   0          4m56s   10.42.0.15
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
+								# In anderem Tab
+								$ export POD_NAME="$(kubectl get pods -l app=k8s-demo-vx -o jsonpath='{.items[*].metadata.name}')"
+								$ k exec -ti $POD_NAME -- curl -w " -> %{response_code}\n" http://localhost:3000/error
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Neue Ausgabe von: kubectl get pods -o wide -w
+								NAME                           READY   STATUS    RESTARTS      AGE
+								k8s-demo-vx-5dccdc4db6-4km5w   1/1     Running   0             4m56s
+								k8s-demo-vx-5dccdc4db6-4km5w   0/1     Error     0             6m45s
+								k8s-demo-vx-5dccdc4db6-4km5w   0/1     Running   1 (2s ago)    6m46s
+								k8s-demo-vx-5dccdc4db6-4km5w   1/1     Running   1 (17s ago)   7m1s
+							</code></pre>
+						</div>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Gelöst
+							- Der Pod (die Anwendung) wird im Fehlerfall automatisch neu gestartet <!-- .element: class="fragment" -->
+							- Es gibt allerdings eine kurze Ausfallzeit <!-- .element: class="fragment" -->
+						</script>
+					</section>
+					<section>
+						<h2>Offene Probleme</h2>
+						<ul>
+							<li>Der Pod ist von außen noch nicht verfügbar</li>
+							<li>Der Name des Pods ist nicht stabil<br>
+							   <span style="font-size: 1.7rem">Wenn der Pod gelöscht wird, bekommt der Neue einen anderen Namen</span>
+							</li>
+						</ul>
+					</section>
+					<section data-markdown>
+						## Fehlende Lösungen
+						Wie kann die Anwendung von außerhalb des Clusters aufgerufen werden?
+					</section>
 				</section>
 
 				<section>
-					<h2>Service Manifest</h2>
-					<pre data-id="code-animation"><code data-line-numbers="2,4|10,11|13-15" data-trim>
+					<section id="service">
+						<h1>Service</h1>
+						<img src="./assets/service.svg" height="300" alt="Service">
+						<ul style="font-size: 1.8rem">
+							<li>Abstraktionsschicht für eine Menge an Pods</li>
+							<li>ermöglicht Zugriff von außerhalb des Clusters</li>
+							<li>kann Load Balancing</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Service Manifest</h2>
+						<pre data-id="code-animation"><code data-line-numbers="2,4|10,11|13-15" data-trim>
 apiVersion: v1
 kind: Service
 metadata:
@@ -424,68 +465,71 @@ spec:
     - port: 80
       name: http
       targetPort: http-app
-					</code></pre>
-				</section>
-				<section>
-					<h2>Service anlegen</h2>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# Services anzeigen lassen
-							$ k get services
-							No resources found in workshop namespace.
 						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# Service anlegen
-							$ k apply -f k8s-demo-vx-service.yaml
-							service/k8s-demo-vx-svc created
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							$ k get svc
-							NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
-							k8s-demo-vx-svc   ClusterIP   10.43.156.185   &lt;none&gt;        80/TCP    46s
-						</code></pre>
-					</div>
-				</section>
-				<section>
-					<h2>Service benutzen</h2>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
-							# Alias für Hilfspod erzeugen
-							$ alias ktools='kubectl run tools --rm -it --image wbitt/network-multitool -- /bin/bash'
-							$ ktools
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:0.8rem;" class="language-console" data-trim>
-							# Anwendung innerhalb des Clusters über Service aufrufen
-							$ curl -w " -&gt; %{response_code}\n" http://k8s-demo-vx-svc/state
-							$ for i in {1..120}; do curl -w " .&gt; %{response_code}\n" http://k8s-demo-vx-svc/state; sleep 1; done
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
-							# Pod von anderem Tab aus löschen
-							$ k delete pod -l app=k8s-demo-vx
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-plaintext" data-trim>
-							# In dem Hilfspod sieht man einen Wechsel des Hostnamens
-							# {"host":"k8s-demo-vx-5dccdc4db6-4km5w",...,"totalRequests":26,...} -&gt; 200
-							# {"host":"k8s-demo-vx-5dccdc4db6-zcv5g",...,"totalRequests":1,...} -&gt; 200
+					</section>
+					<section>
+						<h2>Service anlegen</h2>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Services anzeigen lassen
+								$ k get services
+								No resources found in workshop namespace.
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Service anlegen
+								$ k apply -f k8s-demo-vx-service.yaml
+								service/k8s-demo-vx-svc created
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								$ k get svc
+								NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+								k8s-demo-vx-svc   ClusterIP   10.43.156.185   &lt;none&gt;        80/TCP    46s
+							</code></pre>
+						</div>
+					</section>
+					<section>
+						<h2>Service benutzen</h2>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
+								# Alias für Hilfspod erzeugen
+								$ alias ktools='kubectl run tools --rm -it --image wbitt/network-multitool -- /bin/bash'
+								$ ktools
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:0.8rem;" class="language-console" data-trim>
+								# Anwendung innerhalb des Clusters über Service aufrufen
+								$ curl -w " -&gt; %{response_code}\n" http://k8s-demo-vx-svc/state
+								$ for i in {1..120}; do curl -w " .&gt; %{response_code}\n" http://k8s-demo-vx-svc/state; sleep 1; done
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
+								# Pod von anderem Tab aus löschen
+								$ k delete pod -l app=k8s-demo-vx
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-plaintext" data-trim>
+								# In dem Hilfspod sieht man einen Wechsel des Hostnamens
+								# {"host":"k8s-demo-vx-5dccdc4db6-4km5w",...,"totalRequests":26,...} -&gt; 200
+								# {"host":"k8s-demo-vx-5dccdc4db6-zcv5g",...,"totalRequests":1,...} -&gt; 200
 
-							# "host" ändert sich und "totalRequests" beginnt bei 1
-						</code></pre>
-					</div>
+								# "host" ändert sich und "totalRequests" beginnt bei 1
+							</code></pre>
+						</div>
+					</section>
 				</section>
+
 				<section>
-					<h2>Ingress Manifest</h2>
-					<p>App noch nicht von außerhalb des Clusters erreichbar</p>
-					<pre class="fragment" data-id="code-animation"><code data-line-numbers="2,8|10|12|16-19" data-trim>
+					<section id="ingress">
+						<h2>Ingress Manifest</h2>
+						<p>App noch nicht von außerhalb des Clusters erreichbar</p>
+						<pre class="fragment" data-id="code-animation"><code data-line-numbers="2,8|10|12|16-19" data-trim>
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -507,221 +551,235 @@ spec:
                   name: http
             path: /
             pathType: Prefix
-					</code></pre>
-				</section>
-				<section>
-					<h2>Ingress benutzen</h2>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# Ingress anlegen
-							$ k apply -f k8s-demo-vx-ingress.yaml
 						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# Aufruf der Anwendung von außerhalb über den Hostnamen k8s-demo-vx.internal
-							$ curl -w " -&gt; %{response_code}\n" http://k8s-demo-vx.internal/state
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<p>/etc/hosts erweitern</p>
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-						$ sudo nano /etc/hosts
-						</code></pre>
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-plaintext" data-trim>
-						127.0.0.1 k8s-demo-vx.internal k8s-demo-blue-green.internal k8s-demo-canary.internal
-						</code></pre>
-					</div>
-					<div class="fragment" style="font-size: 2rem">
-						<p>Im Browser aufrufen
-							<a target="_blank" href="http://k8s-demo-vx.internal">http://k8s-demo-vx.internal</a>
-						</p>
-					</div>
-				</section>
-
-				<section>
-					<h1>Deployment Strategien</h1>
-				</section>
-				<section>
-					<h2>Drei Arten im Workshop</h2>
-					<ul>
-						<li class="fragment">Rolling Update</li>
-						<li class="fragment">Blue Green</li>
-						<li class="fragment">Canary</li>
-					</ul>
-					<div class="fragment" style="font-size: 1.3rem; text-align: left">
-						<p>Referenzen</p>
-						<a href="https://kubernetes.io/blog/2018/04/30/zero-downtime-deployment-kubernetes-jenkins/" target="_blank">https://kubernetes.io/blog/2018/04/30/zero-downtime-deployment-kubernetes-jenkins/</a>
-					</div>
+					</section>
+					<section>
+						<h2>Ingress benutzen</h2>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Ingress anlegen
+								$ k apply -f k8s-demo-vx-ingress.yaml
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Aufruf der Anwendung von außerhalb über den Hostnamen k8s-demo-vx.internal
+								$ curl -w " -&gt; %{response_code}\n" http://k8s-demo-vx.internal/state
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<p>/etc/hosts erweitern</p>
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+							$ sudo nano /etc/hosts
+							</code></pre>
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-plaintext" data-trim>
+							127.0.0.1 k8s-demo-vx.internal k8s-demo-blue-green.internal k8s-demo-canary.internal
+							</code></pre>
+						</div>
+						<div class="fragment" style="font-size: 2rem">
+							<p>Im Browser aufrufen
+								<a target="_blank" href="http://k8s-demo-vx.internal">http://k8s-demo-vx.internal</a>
+							</p>
+						</div>
+					</section>
 				</section>
 
 				<section>
-					<h2>Rolling Update</h2>
-					<p>Es soll eine neue Version ausgerollt werden.<br>Dabei soll die Anwendung während des Deployments lückenlos verfügbar bleiben.</p>
-				</section>
-				<section>
-					<h2>#Replicas = 1</h2>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# Anwendung in Schleife aufrufen
-							./get-loop.sh
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# In anderem Tab Deployment aktualisieren
-							$ k set image deploy/k8s-demo-vx backend=ghcr.io/stefan-niemeyer/k8s-demo/k8s-demo:v2
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							$ k get pods -w
-							NAME                           READY   STATUS              RESTARTS   AGE
-							k8s-demo-vx-56bc795557-kdzjw   1/1     Running             0          93s
-							k8s-demo-vx-84454c4c9d-2q8bh   0/1     ContainerCreating   0          6s
-							k8s-demo-vx-84454c4c9d-2q8bh   0/1     Running             0          21s
-							k8s-demo-vx-84454c4c9d-2q8bh   1/1     Running             0          31s
-							k8s-demo-vx-56bc795557-kdzjw   1/1     Terminating         0          118s
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# Historie des Deployments anschauen
-							$ k rollout history deployment/k8s-demo-vx
-						</code></pre>
-					</div>
-				</section>
-				<section>
-					<h2>RollingUpdate Ergebnis</h2>
-					<pre data-id="code-animation"><code style="font-size:1rem;" class="language-json" data-trim>
-						{"host":"k8s-demo-vx-59844756b4-ct29r",...,"version":"v1","totalRequests":67,...} -&gt; 200
-						{"host":"k8s-demo-vx-59844756b4-ct29r",...,"version":"v1","totalRequests":68,...} -&gt; 200
-						{"host":"k8s-demo-vx-56bc795557-kdzjw",...,"version":"v2","totalRequests":1,...} -&gt; 200
-						{"host":"k8s-demo-vx-59844756b4-ct29r",...,"version":"v1","totalRequests":69,...} -&gt; 200
-						{"host":"k8s-demo-vx-56bc795557-kdzjw",...,"version":"v2","totalRequests":2,...} -&gt; 200
-						{"host":"k8s-demo-vx-56bc795557-kdzjw",...,"version":"v2","totalRequests":3,...} -&gt; 200
-					</code></pre>
-					<ul style="font-size:1.5rem;">
-						<li>Neue Version ist ausgerollt, siehe 'version' in der Antwort</li>
-						<li>Anzahl Request ist wieder bei 1</li>
-						<li>Evtl. stehen kurzfristig die beiden Versionen parallel zur Verfügung</li>
-					</ul>
-				</section>
-				<section>
-					<h2>Skalieren</h2>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							$ k get replicaset
-							NAME                       DESIRED   CURRENT   READY   AGE
-							k8s-demo-vx-57b5dcd478     1         1         1       1h
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							$ k scale deployments/k8s-demo-vx --replicas=4
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							$ kubectl get pods -o wide
-							NAME                           READY   STATUS    RESTARTS   AGE   IP
-							k8s-demo-vx-84454c4c9d-2q8bh   1/1     Running   0          17m   10.42.0.56
-							k8s-demo-vx-84454c4c9d-559b8   1/1     Running   0          87s   10.42.0.57
-							k8s-demo-vx-84454c4c9d-vgc8w   1/1     Running   0          87s   10.42.0.59
-							k8s-demo-vx-84454c4c9d-94lb8   1/1     Running   0          87s   10.42.0.58
-
-							# Die Pods haben eigene IP-Adressen im Cluster
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							$ k get rs
-							NAME                     DESIRED   CURRENT   READY   AGE
-							k8s-demo-vx-57b5dcd478   4         4         4       1h
-						</code></pre>
-					</div>
-				</section>
-				<section>
-					<h2>Ausfallsicherheit testen</h2>
-					<div>
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# Anwendung in Schleife aufrufen
-							./get-loop.sh
-
-							# In anderem Tab Pods löschen
-							$ curl -X GET -w " -&gt; %{response_code}\n" http://k8s-demo-vx.internal/error
-						</code></pre>
-					</div>
-				</section>
-				<section>
-					<h2>Lösungen</h2>
-					<ul>
-						<li>Die Verfügbarkeit der Anwendung ist höher</li>
-						<li>Der Neustart eines Pods führt nicht zu einem Ausfall</li>
-					</ul>
+					<section data-markdown id="deployment-strategien">
+						# Deployment Strategien
+					</section>
+					<section>
+						<h2>Drei Arten im Workshop</h2>
+						<ul>
+							<li class="fragment">Rolling Update</li>
+							<li class="fragment">Blue Green</li>
+							<li class="fragment">Canary</li>
+						</ul>
+						<div class="fragment" style="font-size: 1.3rem; text-align: left">
+							<p>Referenzen</p>
+							<a href="https://kubernetes.io/blog/2018/04/30/zero-downtime-deployment-kubernetes-jenkins/" target="_blank">https://kubernetes.io/blog/2018/04/30/zero-downtime-deployment-kubernetes-jenkins/</a>
+						</div>
+					</section>
 				</section>
 
 				<section>
-					<h2>Blue/Green Deployment</h2>
-					<p><b>Einsatzszenarien laut ChatGPT 4</b></p>
-					<ol>
-						<li>Minimierung von Ausfallzeiten bei Updates</li>
-						<li>Sicherstellung der Zuverlässigkeit</li>
-						<li>Einfaches Testing</li>
-						<li>Komplexe Anwendungs-Updates</li>
-						<li>Compliance und Audit-Anforderungen</li>
-					</ol>
+					<section data-markdown id="rolling-update">
+						## Rolling Update
+
+						Es soll eine neue Version ausgerollt werden.
+						Dabei soll die Anwendung während des Deployments lückenlos verfügbar bleiben.
+					</section>
+					<section>
+						<h2>#Replicas = 1</h2>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Anwendung in Schleife aufrufen
+								./get-loop.sh
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# In anderem Tab Deployment aktualisieren
+								$ k set image deploy/k8s-demo-vx backend=ghcr.io/stefan-niemeyer/k8s-demo/k8s-demo:v2
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								$ k get pods -w
+								NAME                           READY   STATUS              RESTARTS   AGE
+								k8s-demo-vx-56bc795557-kdzjw   1/1     Running             0          93s
+								k8s-demo-vx-84454c4c9d-2q8bh   0/1     ContainerCreating   0          6s
+								k8s-demo-vx-84454c4c9d-2q8bh   0/1     Running             0          21s
+								k8s-demo-vx-84454c4c9d-2q8bh   1/1     Running             0          31s
+								k8s-demo-vx-56bc795557-kdzjw   1/1     Terminating         0          118s
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Historie des Deployments anschauen
+								$ k rollout history deployment/k8s-demo-vx
+							</code></pre>
+						</div>
+					</section>
+					<section>
+						<h2>RollingUpdate Ergebnis</h2>
+						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-json" data-trim>
+							{"host":"k8s-demo-vx-59844756b4-ct29r",...,"version":"v1","totalRequests":67,...} -&gt; 200
+							{"host":"k8s-demo-vx-59844756b4-ct29r",...,"version":"v1","totalRequests":68,...} -&gt; 200
+							{"host":"k8s-demo-vx-56bc795557-kdzjw",...,"version":"v2","totalRequests":1,...} -&gt; 200
+							{"host":"k8s-demo-vx-59844756b4-ct29r",...,"version":"v1","totalRequests":69,...} -&gt; 200
+							{"host":"k8s-demo-vx-56bc795557-kdzjw",...,"version":"v2","totalRequests":2,...} -&gt; 200
+							{"host":"k8s-demo-vx-56bc795557-kdzjw",...,"version":"v2","totalRequests":3,...} -&gt; 200
+						</code></pre>
+						<ul style="font-size:1.5rem;">
+							<li>Neue Version ist ausgerollt, siehe 'version' in der Antwort</li>
+							<li>Anzahl Request ist wieder bei 1</li>
+							<li>Evtl. stehen kurzfristig die beiden Versionen parallel zur Verfügung</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Skalieren</h2>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								$ k get replicaset
+								NAME                       DESIRED   CURRENT   READY   AGE
+								k8s-demo-vx-57b5dcd478     1         1         1       1h
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								$ k scale deployments/k8s-demo-vx --replicas=4
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								$ kubectl get pods -o wide
+								NAME                           READY   STATUS    RESTARTS   AGE   IP
+								k8s-demo-vx-84454c4c9d-2q8bh   1/1     Running   0          17m   10.42.0.56
+								k8s-demo-vx-84454c4c9d-559b8   1/1     Running   0          87s   10.42.0.57
+								k8s-demo-vx-84454c4c9d-vgc8w   1/1     Running   0          87s   10.42.0.59
+								k8s-demo-vx-84454c4c9d-94lb8   1/1     Running   0          87s   10.42.0.58
+
+								# Die Pods haben eigene IP-Adressen im Cluster
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								$ k get rs
+								NAME                     DESIRED   CURRENT   READY   AGE
+								k8s-demo-vx-57b5dcd478   4         4         4       1h
+							</code></pre>
+						</div>
+					</section>
+					<section>
+						<h2>Ausfallsicherheit testen</h2>
+						<div>
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Anwendung in Schleife aufrufen
+								./get-loop.sh
+
+								# In anderem Tab Pods löschen
+								$ curl -X GET -w " -&gt; %{response_code}\n" http://k8s-demo-vx.internal/error
+							</code></pre>
+						</div>
+					</section>
+					<section data-markdown>
+						## Gelöst
+						- Die Verfügbarkeit der Anwendung ist höher
+						- Der Neustart eines Pods führt nicht zu einem Ausfall
+					</section>
 				</section>
+
 				<section>
-					<h3>Minimierung von Ausfallzeiten bei Updates</h3>
-					<p>Bei der Aktualisierung von Anwendungen ermöglicht das Blue/Green-Deployment nahezu unterbrechungsfreie Releases,
+					<section id="blue-green">
+						<h2>Blue/Green Deployment</h2>
+						<p><b>Einsatzszenarien laut ChatGPT 4</b></p>
+						<ol>
+							<li>Minimierung von Ausfallzeiten bei Updates</li>
+							<li>Sicherstellung der Zuverlässigkeit</li>
+							<li>Einfaches Testing</li>
+							<li>Komplexe Anwendungs-Updates</li>
+							<li>Compliance und Audit-Anforderungen</li>
+						</ol>
+					</section>
+					<section data-markdown data-menu-title="Minimierung von Ausfallzeiten">
+						### Minimierung von Ausfallzeiten bei Updates
+
+						Bei der Aktualisierung von Anwendungen ermöglicht das Blue/Green-Deployment nahezu unterbrechungsfreie Releases,
 						da die neue Version (Green) vollständig bereitgestellt und getestet wird,
-						bevor der Verkehr von der alten Version (Blue) umgeleitet wird.</p>
-				</section>
-				<section>
-					<h3>Sicherstellung der Zuverlässigkeit</h3>
-					<p>Dieses Verfahren bietet eine hohe Zuverlässigkeit, da im Falle von Problemen mit
+						bevor der Verkehr von der alten Version (Blue) umgeleitet wird.
+					</section>
+					<section data-markdown data-menu-title="Sicherstellung Zuverlässigkeit">
+						### Sicherstellung der Zuverlässigkeit
+
+						Dieses Verfahren bietet eine hohe Zuverlässigkeit, da im Falle von Problemen mit
 						der neuen Version (Green) schnell und ohne Ausfallzeit auf die alte Version (Blue)
-						zurückgegriffen werden kann.</p>
-				</section>
-				<section>
-					<h3>Einfaches Testing</h3>
-					<p>Blue/Green-Deployments ermöglichen es, die neue Version unter realen Bedingungen zu testen,
+						zurückgegriffen werden kann.
+					</section>
+					<section data-markdown>
+						### Einfaches Testing
+
+						Blue/Green-Deployments ermöglichen es, die neue Version unter realen Bedingungen zu testen,
 						ohne die aktuelle Produktionsumgebung zu beeinträchtigen.
-						Dies ist ideal für End-to-End-Tests und Lasttests.</p>
-				</section>
-				<section>
-					<h3>Komplexe Anwendungs-Updates</h3>
-					<p>Für Anwendungen, bei denen eine direkte Aktualisierung komplex oder riskant ist,
+						Dies ist ideal für End-to-End-Tests und Lasttests.
+					</section>
+					<section data-markdown>
+						### Komplexe Anwendungs-Updates
+
+						Für Anwendungen, bei denen eine direkte Aktualisierung komplex oder riskant ist,
 						bietet Blue/Green eine sichere Methode, um die neue Version umfassend zu prüfen,
-						bevor sie live geschaltet wird.</p>
-				</section>
-				<section>
-					<h3>Compliance und Audit-Anforderungen</h3>
-					<p>In Umgebungen, in denen Compliance und Auditing entscheidend sind, erlaubt Blue/Green
+						bevor sie live geschaltet wird.
+					</section>
+					<section data-markdown data-menu-title="Compliance und Audit">
+						### Compliance und Audit-Anforderungen
+
+						In Umgebungen, in denen Compliance und Auditing entscheidend sind, erlaubt Blue/Green
 						detaillierte Prüfungen und Validierungen der neuen Version,
-						bevor sie in Betrieb genommen wird.</p>
+						bevor sie in Betrieb genommen wird.
+					</section>
 				</section>
+
 				<section>
-					<h2>Blue ausrollen</h2>
-					<div>
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# Version 'blue' ausrollen
-							$ k apply -f k8s-demo-blue.yaml
-							deployment.apps/k8s-demo-blue created
-							service/k8s-demo-blue-svc created
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# Ingress auf Service 'k8s-demo-blue-svc' zeigen lassen
-							$ k apply -f k8s-demo-blue-ingress.yaml
-						</code></pre>
-					</div>
-				</section>
-				<section>
-					<h2>Ingress Blue/Green Manifest</h2>
-					<pre data-id="code-animation"><code data-line-numbers="2,8|12|17" data-trim>
+					<section>
+						<h2>Blue ausrollen</h2>
+						<div>
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Version 'blue' ausrollen
+								$ k apply -f k8s-demo-blue.yaml
+								deployment.apps/k8s-demo-blue created
+								service/k8s-demo-blue-svc created
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Ingress auf Service 'k8s-demo-blue-svc' zeigen lassen
+								$ k apply -f k8s-demo-blue-ingress.yaml
+							</code></pre>
+						</div>
+					</section>
+					<section>
+						<h2>Ingress Blue/Green Manifest</h2>
+						<pre data-id="code-animation"><code data-line-numbers="2,8|12|17" data-trim>
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -743,110 +801,119 @@ spec:
                   name: http
             path: /
             pathType: Prefix
-					</code></pre>
-					<div class="fragment" style="font-size: 2rem">
-						<p>Im Browser aufrufen
-							<a target="_blank" href="http://k8s-demo-blue-green.internal">http://k8s-demo-blue-green.internal</a>
-						</p>
-					</div>
-				</section>
-				<section>
-					<h2>Green ausrollen</h2>
-					<div>
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# Version 'green' ausrollen
-							$ k apply -f k8s-demo-green.yaml
-							deployment.apps/k8s-demo-green created
-							service/k8s-demo-green-svc created
 						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# Anwendung in Schleife aufrufen
-							./get-loop.sh blue-green
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# In anderem Tab
-							$ diff k8s-demo-blue-ingress.yaml k8s-demo-green-ingress.yaml
-							17c17
-							<                 name: k8s-demo-blue-svc
-							---
-							>                 name: k8s-demo-green-svc
-						</code></pre>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# Ingress auf Service 'k8s-demo-green-svc' zeigen lassen
-							$ k apply -f k8s-demo-green-ingress.yaml
-						</code></pre>
-					</div>
-					<div class="fragment" style="font-size: 2rem">
-						<p>Im Browser aufrufen
-							<a target="_blank" href="http://k8s-demo-blue-green.internal">http://k8s-demo-blue-green.internal</a>
-						</p>
-					</div>
+						<div class="fragment" style="font-size: 2rem">
+							<p>Im Browser aufrufen
+								<a target="_blank" href="http://k8s-demo-blue-green.internal">http://k8s-demo-blue-green.internal</a>
+							</p>
+						</div>
+					</section>
+					<section>
+						<h2>Green ausrollen</h2>
+						<div>
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Version 'green' ausrollen
+								$ k apply -f k8s-demo-green.yaml
+								deployment.apps/k8s-demo-green created
+								service/k8s-demo-green-svc created
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Anwendung in Schleife aufrufen
+								./get-loop.sh blue-green
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# In anderem Tab
+								$ diff k8s-demo-blue-ingress.yaml k8s-demo-green-ingress.yaml
+								17c17
+								<                 name: k8s-demo-blue-svc
+								---
+								>                 name: k8s-demo-green-svc
+							</code></pre>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Ingress auf Service 'k8s-demo-green-svc' zeigen lassen
+								$ k apply -f k8s-demo-green-ingress.yaml
+							</code></pre>
+						</div>
+						<div class="fragment" style="font-size: 2rem">
+							<p>Im Browser aufrufen
+								<a target="_blank" href="http://k8s-demo-blue-green.internal">http://k8s-demo-blue-green.internal</a>
+							</p>
+						</div>
+					</section>
 				</section>
 
 				<section>
-					<h2>Canary Deployment</h2>
-					<p><b>Einsatzszenarien laut ChatGPT 4</b></p>
-					<ol>
-						<li>Schrittweise Einführung neuer Features</li>
-						<li>Reduzierung des Risikos von Fehlern</li>
-						<li>Sammlung von Feedback und Daten</li>
-						<li>Kompatibilitätsprüfungen</li>
-						<li>Continuous Deployment und Integration</li>
-					</ol>
-				</section>
-				<section>
-					<h3>Schrittweise Einführung neuer Features</h3>
-					<p>Canary-Deployments ermöglichen es, neue Versionen einer Anwendung schrittweise einzuführen,
+					<section id="canary">
+						<h2>Canary Deployment</h2>
+						<p><b>Einsatzszenarien laut ChatGPT 4</b></p>
+						<ol>
+							<li>Schrittweise Einführung neuer Features</li>
+							<li>Reduzierung des Risikos von Fehlern</li>
+							<li>Sammlung von Feedback und Daten</li>
+							<li>Kompatibilitätsprüfungen</li>
+							<li>Continuous Deployment und Integration</li>
+						</ol>
+					</section>
+					<section data-markdown data-menu-title="Schrittweise Einführung">
+						### Schrittweise Einführung neuer Features
+
+						Canary-Deployments ermöglichen es, neue Versionen einer Anwendung schrittweise einzuführen,
 						indem sie zunächst nur einem kleinen Prozentsatz der Benutzer zur Verfügung gestellt werden.
-						Dies ist nützlich, um die Akzeptanz und das Verhalten neuer Features in einer realen Umgebung zu testen.</p>
-				</section>
-				<section>
-					<h3>Reduzierung des Risikos von Fehlern</h3>
-					<p>Bei der Einführung neuer Versionen minimieren Canary-Deployments das Risiko, da bei auftretenden Problemen
-						nur ein kleiner Teil der Benutzer betroffen ist und schnell auf die vorherige Version zurückgekehrt werden kann.</p>
-				</section>
-				<section>
-					<h3>Sammlung von Feedback und Daten</h3>
-					<p>Sie ermöglichen das Sammeln von Feedback und Leistungsdaten in einer realen Umgebung,
+						Dies ist nützlich, um die Akzeptanz und das Verhalten neuer Features in einer realen Umgebung zu testen.
+					</section>
+					<section data-markdown data-menu-title="Reduzierung Risiko">
+						### Reduzierung des Risikos von Fehlern
+
+						Bei der Einführung neuer Versionen minimieren Canary-Deployments das Risiko, da bei auftretenden Problemen
+						nur ein kleiner Teil der Benutzer betroffen ist und schnell auf die vorherige Version zurückgekehrt werden kann.
+					</section>
+					<section data-markdown data-menu-title="Sammlung Feedback">
+						### Sammlung von Feedback und Daten
+
+						Sie ermöglichen das Sammeln von Feedback und Leistungsdaten in einer realen Umgebung,
 						bevor eine neue Version vollständig ausgerollt wird. Dies ist besonders wertvoll
-						für Performance-Testing und Benutzerfeedback.</p>
-				</section>
-				<section>
-					<h3>Kompatibilitätsprüfungen</h3>
-					<p>In heterogenen Umgebungen, wo unterschiedliche Benutzergruppen unterschiedliche Anforderungen haben,
-						erlauben Canary-Deployments die Prüfung der Kompatibilität der neuen Versionen mit verschiedenen Benutzersegmenten.</p>
-				</section>
-				<section>
-					<h3>Continuous Deployment und Integration</h3>
-					<p>Canary-Deployments unterstützen Continuous Deployment- und Continuous Integration-Prozesse,
+						für Performance-Testing und Benutzerfeedback.
+					</section>
+					<section data-markdown>
+						### Kompatibilitätsprüfungen
+
+						In heterogenen Umgebungen, wo unterschiedliche Benutzergruppen unterschiedliche Anforderungen haben,
+						erlauben Canary-Deployments die Prüfung der Kompatibilität der neuen Versionen mit verschiedenen Benutzersegmenten.
+					</section>
+					<section data-markdown data-menu-title="CI/CD">
+						### Continuous Deployment und Integration
+
+						Canary-Deployments unterstützen Continuous Deployment- und Continuous Integration-Prozesse,
 						indem sie eine nahtlose Integration und Auslieferung neuer Code-Updates in
-						einer Produktionsumgebung ermöglichen, ohne dabei die Stabilität des Gesamtsystems zu gefährden.</p>
+						einer Produktionsumgebung ermöglichen, ohne dabei die Stabilität des Gesamtsystems zu gefährden.
+					</section>
+					<section data-menu-title="Zusammenfassung">
+						<blockquote>Diese Strategie ist besonders geeignet für große und komplexe Anwendungen, wo das Risiko von Ausfällen und Fehlern minimiert werden muss und wo das Feedback der Endnutzer entscheidend für die Weiterentwicklung der Anwendung ist.
+						</blockquote>
+						<p style="font-size: 1.5rem">Generiert von ChatGPT 4</p>
+					</section>
 				</section>
 				<section>
-					<blockquote>Diese Strategie ist besonders geeignet für große und komplexe Anwendungen, wo das Risiko von Ausfällen und Fehlern minimiert werden muss und wo das Feedback der Endnutzer entscheidend für die Weiterentwicklung der Anwendung ist.
-					</blockquote>
-					<p style="font-size: 1.5rem">Generiert von ChatGPT 4</p>
-				</section>
-				<section>
-					<h2>Canary ausrollen</h2>
-					<div>
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# Version 'canary' ausrollen
-							$ k apply -f k8s-demo-canary.yaml
-							deployment.apps/k8s-demo-canary created
-							service/k8s-demo-canary-svc created
-						</code></pre>
-					</div>
-				</section>
-				<section>
-					<h2>IngressRoute Manifest</h2>
-					<pre data-id="code-animation"><code data-line-numbers="2,8|13|16-18|19-21" data-trim>
+					<section>
+						<h2>Canary ausrollen</h2>
+						<div>
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Version 'canary' ausrollen
+								$ k apply -f k8s-demo-canary.yaml
+								deployment.apps/k8s-demo-canary created
+								service/k8s-demo-canary-svc created
+							</code></pre>
+						</div>
+					</section>
+					<section>
+						<h2>IngressRoute Manifest</h2>
+						<pre data-id="code-animation"><code data-line-numbers="2,8|13|16-18|19-21" data-trim>
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -868,27 +935,27 @@ spec:
         - name: k8s-demo-canary-svc
           port: http
           weight: 20  # 10% der Anfragen an k8s-demo-canary-svc
-					</code></pre>
-				</section>
-				<section>
-					<h2>IngresRoute ausrollen</h2>
-					<div>
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# IngressRoute anlegen mit Aufteilung zwischen Services 80/20
-							$ k apply -f k8s-demo-canary-ingress-route.yaml
 						</code></pre>
-					</div>
-					<div class="fragment" style="font-size: 2rem">
-						<p>Im Browser mehrmals aufrufen
-							<a target="_blank" href="http://k8s-demo-canary.internal/">http://k8s-demo-canary.internal/</a>
-						</p>
-					</div>
-					<div class="fragment">
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							# Anwendung in Schleife aufrufen
-							$ ./get-loop.sh canary
-						</code></pre>
-						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-json" data-trim>
+					</section>
+					<section>
+						<h2>IngresRoute ausrollen</h2>
+						<div>
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# IngressRoute anlegen mit Aufteilung zwischen Services 80/20
+								$ k apply -f k8s-demo-canary-ingress-route.yaml
+							</code></pre>
+						</div>
+						<div class="fragment" style="font-size: 2rem">
+							<p>Im Browser mehrmals aufrufen
+								<a target="_blank" href="http://k8s-demo-canary.internal/">http://k8s-demo-canary.internal/</a>
+							</p>
+						</div>
+						<div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Anwendung in Schleife aufrufen
+								$ ./get-loop.sh canary
+							</code></pre>
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-json" data-trim>
 {"host":"k8s-demo-vx-56bc795557-stkt2",...,"version":"v2","totalRequests":234,...}
 {"host":"k8s-demo-vx-56bc795557-v5rs9",...,"version":"v2","totalRequests":236,...}
 {"host":"k8s-demo-vx-56bc795557-vfjdv",...,"version":"v2","totalRequests":238,...}
@@ -900,35 +967,36 @@ spec:
 {"host":"k8s-demo-vx-56bc795557-4p99r",...,"version":"v2","totalRequests":238,...}
 {"host":"k8s-demo-canary-5c76669fc-5mx52",...,"version":"canary","totalRequests":31,...}
 {"host":"k8s-demo-vx-56bc795557-stkt2",...,"version":"v2","totalRequests":236,...}
-						</code></pre>
-					</div>
+							</code></pre>
+						</div>
+					</section>
 				</section>
 
 				<section>
 					<h1>THE END</h1>
-					<p>Fragen</p>
-					<img src="./assets/DALL·E_Fragen.png" height="300">
+					<img src="./assets/DALL·E_Fragen.png" height="300" alt="Fragen">
+					<p>Fragen?</p>
 					<p style="font-size: 1rem; text-align: left;">Bild generiert von ChatGPT 4</p>
 				</section>
 
 				<section>
 					<h2>Links</h2>
-					<ul>
+					<ul style="font-size: 1.7rem">
 						<li>Kubernetes <a href="https://kubernetes.io/" target="_blank">https://kubernetes.io/</a></li>
 						<li>K3s (leichtgewichtiges K8s) <a href="https://k3s.io/" target="_blank">https://k3s.io/</a></li>
 						<li>K9s (CLI Tool) <a href="https://k9scli.io/" target="_blank">https://k9scli.io/</a></li>
+						<li>revealjs <a href="https://revealjs.com/" target="_blank">https://revealjs.com/</a></li>
+						<li>revealjs-menu <a href="https://github.com/denehyg/reveal.js-menu" target="_blank">https://github.com/denehyg/reveal.js-menu</a></li>
 					</ul>
 				</section>
 			</div>
 		</div>
-	<!--
-
-	-->
 
 		<script src="dist/reveal.js"></script>
 		<script src="plugin/notes/notes.js"></script>
 		<script src="plugin/markdown/markdown.js"></script>
 		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/menu/menu.js"></script>
 		<script>
 			// More info about initialization & config:
 			// - https://revealjs.com/initialization/
@@ -943,7 +1011,140 @@ spec:
 				// scrollProgress: true,
 
 				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMenu ],
+
+				menu: {
+					// Specifies which side of the presentation the menu will
+					// be shown. Use 'left' or 'right'.
+					side: 'left',
+
+					// Specifies the width of the menu.
+					// Can be one of the following:
+					// 'normal', 'wide', 'third', 'half', 'full', or
+					// any valid css length value
+					width: 'normal',
+
+					// Add slide numbers to the titles in the slide list.
+					// Use 'true' or format string (same as reveal.js slide numbers)
+					numbers: false,
+
+					// Specifies which slide elements will be used for generating
+					// the slide titles in the menu. The default selects the first
+					// heading element found in the slide, but you can specify any
+					// valid css selector and the text from the first matching
+					// element will be used.
+					// Note: that a section data-menu-title attribute or an element
+					// with a menu-title class will take precedence over this option
+					titleSelector: 'h1, h2, h3, h4, h5, h6',
+
+					// If slides do not have a matching title, attempt to use the
+					// start of the text content as the title instead
+					useTextContentForMissingTitles: false,
+
+					// Hide slides from the menu that do not have a title.
+					// Set to 'true' to only list slides with titles.
+					hideMissingTitles: false,
+
+					// Adds markers to the slide titles to indicate the
+					// progress through the presentation. Set to 'false'
+					// to hide the markers.
+					markers: true,
+
+					// Specify custom panels to be included in the menu, by
+					// providing an array of objects with 'title', 'icon'
+					// properties, and either a 'src' or 'content' property.
+					 custom: [
+						{
+							title: 'Links',
+							icon: '<i class="fa fa-external-link-alt">',
+							src: 'links.html'
+						}
+					],
+
+					// Specifies the themes that will be available in the themes
+					// menu panel. Set to 'true' to show the themes menu panel
+					// with the default themes list. Alternatively, provide an
+					// array to specify the themes to make available in the
+					// themes menu panel, for example...
+					//
+					// [
+					//     { name: 'Black', theme: 'dist/theme/black.css' },
+					//     { name: 'White', theme: 'dist/theme/white.css' },
+					//     { name: 'League', theme: 'dist/theme/league.css' },
+					//     {
+					//       name: 'Dark',
+					//       theme: 'lib/reveal.js/dist/theme/black.css',
+					//       highlightTheme: 'lib/reveal.js/plugin/highlight/monokai.css'
+					//     },
+					//     {
+					//       name: 'Code: Zenburn',
+					//       highlightTheme: 'lib/reveal.js/plugin/highlight/zenburn.css'
+					//     }
+					// ]
+					//
+					// Note: specifying highlightTheme without a theme will
+					// change the code highlight theme while leaving the
+					// presentation theme unchanged.
+					themes: true,
+
+					// Specifies the path to the default theme files. If your
+					// presentation uses a different path to the standard reveal
+					// layout then you need to provide this option, but only
+					// when 'themes' is set to 'true'. If you provide your own
+					// list of themes or 'themes' is set to 'false' the
+					// 'themesPath' option is ignored.
+					themesPath: 'dist/theme/',
+
+					// Specifies if the transitions menu panel will be shown.
+					// Set to 'true' to show the transitions menu panel with
+					// the default transitions list. Alternatively, provide an
+					// array to specify the transitions to make available in
+					// the transitions panel, for example...
+					// ['None', 'Fade', 'Slide']
+					transitions: true,
+
+					// Adds a menu button to the slides to open the menu panel.
+					// Set to 'false' to hide the button.
+					openButton: true,
+
+					// If 'true' allows the slide number in the presentation to
+					// open the menu panel. The reveal.js slideNumber option must
+					// be displayed for this to take effect
+					openSlideNumber: false,
+
+					// If true allows the user to open and navigate the menu using
+					// the keyboard. Standard keyboard interaction with reveal
+					// will be disabled while the menu is open.
+					keyboard: true,
+
+					// Normally the menu will close on user actions such as
+					// selecting a menu item, or clicking the presentation area.
+					// If 'true', the sticky option will leave the menu open
+					// until it is explicitly closed, that is, using the close
+					// button or pressing the ESC or m key (when the keyboard
+					// interaction option is enabled).
+					sticky: false,
+
+					// If 'true' standard menu items will be automatically opened
+					// when navigating using the keyboard. Note: this only takes
+					// effect when both the 'keyboard' and 'sticky' options are enabled.
+					autoOpen: true,
+
+					// If 'true' the menu will not be created until it is explicitly
+					// requested by calling RevealMenu.init(). Note this will delay
+					// the creation of all menu panels, including custom panels, and
+					// the menu button.
+					delayInit: false,
+
+					// If 'true' the menu will be shown when the menu is initialised.
+					openOnInit: false,
+
+					// By default the menu will load it's own font-awesome library
+					// icons. If your presentation needs to load a different
+					// font-awesome library the 'loadIcons' option can be set to false
+					// and the menu will not attempt to load the font-awesome library.
+					loadIcons: true
+				}
 			});
 		</script>
 	</body>
