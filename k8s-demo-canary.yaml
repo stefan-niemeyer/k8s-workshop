@@ -30,8 +30,8 @@ spec:
           image: ghcr.io/stefan-niemeyer/k8s-demo/k8s-demo:canary
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 3000
-              name: http-app
+            - name: http-app
+              containerPort: 3000
               protocol: TCP
           volumeMounts:
             - name: npm-logs
@@ -86,6 +86,6 @@ spec:
   selector:
     app: k8s-demo-canary
   ports:
-    - port: 80
-      name: http
+    - name: http
+      port: 80
       targetPort: http-app

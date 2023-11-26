@@ -90,7 +90,10 @@
 					</section>
 					<section>
 						<h2>VM vs Container</h2>
-						<img src="https://nesi.github.io/nzrse-containers/fig/container_vs_vm.png" alt="Container vs VM">
+						<figure>
+							<img src="https://nesi.github.io/nzrse-containers/fig/container_vs_vm.png" alt="Container vs VM">
+							<figcaption style="font-size: 1rem">Quellenangabe: <a>https://nesi.github.io/nzrse-containers/fig/container_vs_vm.png</a></figcaption>
+						</figure>
 					</section>
 				</section>
 
@@ -110,8 +113,8 @@
 							</code></pre>
 						</div>
 					</section>
-					<section>
-						<h4>K8s Rechte kopieren</h4>
+					<section data-menu-title="K8s Rechte kopieren">
+						<p>K8s Rechte kopieren</p>
 						<pre data-id="code-animation"><code class="language-console" data-trim>
 							$ cd
 							$ mkdir .kube
@@ -218,15 +221,14 @@
 					<section data-markdown>
 						<script type="text/template">
 							## Offene Probleme
-							Nach dem Abstürzen der Anwendung steht sie nicht mehr zur Verfügung <!-- .element: class="fragment" -->
+							- Nach dem Abstürzen der Anwendung steht sie nicht mehr zur Verfügung <!-- .element: class="fragment" -->
 						</script>
 					</section>
 					<section data-markdown>
 						<script type="text/template">
 							## Fehlende Lösungen
-							Was muss getan werden, damit die Anwendung wieder verfügbar ist? <!-- .element: class="fragment" -->
-
-							Wie kann man diese Schritte automatisieren? <!-- .element: class="fragment" -->
+							- Was muss getan werden, damit die Anwendung wieder verfügbar ist? <!-- .element: class="fragment" -->
+							- Wie kann man diese Schritte automatisieren? <!-- .element: class="fragment" -->
 						</script>
 					</section>
 					<section data-menu-title="K8s Meme">
@@ -241,7 +243,7 @@
 						<script type="text/template">
 							## Deployment
 							- Kümmert sich um das Vorhandensein einer definierten Anzahl von Pods <!-- .element: class="fragment" -->
-							- Gewünschte Anzahl an Pods wird über eine ReplicaSet sichergestellt <!-- .element: class="fragment" -->
+							- Gewünschte Anzahl an Pods wird über ein ReplicaSet sichergestellt <!-- .element: class="fragment" -->
 							- Ein Deployment hat eine Versionsverwaltung <!-- .element: class="fragment" -->
 						</script>
 					</section>
@@ -253,7 +255,7 @@
 					</section>
 					<section>
 						<h2>Deployment Manifest</h2>
-						<pre data-id="code-animation"><code data-line-numbers="2,4|11|28-30|33-34" data-trim>
+						<pre data-id="code-animation"><code data-line-numbers="2,4|11|28-30|33-34" class="language-yaml" data-trim>
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -286,8 +288,8 @@ spec:
           image: ghcr.io/stefan-niemeyer/k8s-demo/k8s-demo:v1
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 3000
-              name: http-app
+            - name: http-app
+              containerPort: 3000
               protocol: TCP
           volumeMounts:
             - name: npm-logs
@@ -332,7 +334,7 @@ spec:
 						</code></pre>
 					</section>
 					<section>
-						<h2>Arbeiten mit dem Deployment</h2>
+						<h2>Showtime Deployment</h2>
 						<div class="fragment">
 							<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
 								# Deployment anlegen
@@ -351,7 +353,7 @@ spec:
 							</code></pre>
 						</div>
 						<div class="fragment">
-							<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+							<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-plaintext" data-trim>
 								# Name des Pods in Umgebungsvariable speichern
 								$ export POD_NAME=$(kubectl get pods \
 													  -l app=k8s-demo-vx \
@@ -433,23 +435,26 @@ spec:
 					</section>
 					<section data-markdown>
 						## Fehlende Lösungen
-						Wie kann die Anwendung von außerhalb des Clusters aufgerufen werden?
+						- Wie kann die Anwendung von außerhalb des Clusters aufgerufen werden?
 					</section>
 				</section>
 
 				<section>
 					<section id="service">
 						<h1>Service</h1>
-						<img src="./assets/service.svg" height="300" alt="Service">
 						<ul style="font-size: 1.8rem">
 							<li>Abstraktionsschicht für eine Menge an Pods</li>
 							<li>ermöglicht Zugriff von außerhalb des Clusters</li>
 							<li>kann Load Balancing</li>
 						</ul>
+						<figure>
+							<img src="./assets/service.svg" height="300" alt="Service">
+							<figcaption style="font-size: 1rem">Quellenangabe: <a>https://kubernetes.io/docs/tutorials/kubernetes-basics/expose/expose-intro/</a></figcaption>
+						</figure>
 					</section>
 					<section>
 						<h2>Service Manifest</h2>
-						<pre data-id="code-animation"><code data-line-numbers="2,4|10,11|13-15" data-trim>
+						<pre data-id="code-animation"><code data-line-numbers="2,4|10,11|13-15" class="language-yaml" data-trim>
 apiVersion: v1
 kind: Service
 metadata:
@@ -462,8 +467,8 @@ spec:
   selector:
     app: k8s-demo-vx
   ports:
-    - port: 80
-      name: http
+    - name: http
+      port: 80
       targetPort: http-app
 						</code></pre>
 					</section>
@@ -504,7 +509,7 @@ spec:
 							<pre data-id="code-animation"><code style="font-size:0.8rem;" class="language-console" data-trim>
 								# Anwendung innerhalb des Clusters über Service aufrufen
 								$ curl -w " -&gt; %{response_code}\n" http://k8s-demo-vx-svc/state
-								$ for i in {1..120}; do curl -w " .&gt; %{response_code}\n" http://k8s-demo-vx-svc/state; sleep 1; done
+								$ for i in {1..120}; do curl -w " -&gt; %{response_code}\n" http://k8s-demo-vx-svc/state; sleep 1; done
 							</code></pre>
 						</div>
 						<div class="fragment">
@@ -529,7 +534,7 @@ spec:
 					<section id="ingress">
 						<h2>Ingress Manifest</h2>
 						<p>App noch nicht von außerhalb des Clusters erreichbar</p>
-						<pre class="fragment" data-id="code-animation"><code data-line-numbers="2,8|10|12|16-19" data-trim>
+						<pre class="fragment" data-id="code-animation"><code data-line-numbers="2,8|10|12|16-19" class="language-yaml" data-trim>
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -578,7 +583,7 @@ spec:
 						</div>
 						<div class="fragment" style="font-size: 2rem">
 							<p>Im Browser aufrufen
-								<a target="_blank" href="http://k8s-demo-vx.internal">http://k8s-demo-vx.internal</a>
+								<a href="http://k8s-demo-vx.internal" target="_blank">http://k8s-demo-vx.internal</a>
 							</p>
 						</div>
 					</section>
@@ -592,12 +597,11 @@ spec:
 						<h2>Drei Arten im Workshop</h2>
 						<ul>
 							<li class="fragment">Rolling Update</li>
-							<li class="fragment">Blue Green</li>
+							<li class="fragment">Blue/Green</li>
 							<li class="fragment">Canary</li>
 						</ul>
 						<div class="fragment" style="font-size: 1.3rem; text-align: left">
-							<p>Referenzen</p>
-							<a href="https://kubernetes.io/blog/2018/04/30/zero-downtime-deployment-kubernetes-jenkins/" target="_blank">https://kubernetes.io/blog/2018/04/30/zero-downtime-deployment-kubernetes-jenkins/</a>
+							<p>Referenz: <a href="https://kubernetes.io/blog/2018/04/30/zero-downtime-deployment-kubernetes-jenkins/" target="_blank">https://kubernetes.io/blog/2018/04/30/zero-downtime-deployment-kubernetes-jenkins/</a></p>
 						</div>
 					</section>
 				</section>
@@ -605,9 +609,8 @@ spec:
 				<section>
 					<section data-markdown id="rolling-update">
 						## Rolling Update
-
-						Es soll eine neue Version ausgerollt werden.
-						Dabei soll die Anwendung während des Deployments lückenlos verfügbar bleiben.
+						- Es soll eine neue Version ausgerollt werden.
+						- Dabei soll die Anwendung während des Deployments lückenlos verfügbar bleiben.
 					</section>
 					<section>
 						<h2>#Replicas = 1</h2>
@@ -642,7 +645,7 @@ spec:
 						</div>
 					</section>
 					<section>
-						<h2>RollingUpdate Ergebnis</h2>
+						<h2>Rolling Update Ergebnis</h2>
 						<pre data-id="code-animation"><code style="font-size:1rem;" class="language-json" data-trim>
 							{"host":"k8s-demo-vx-59844756b4-ct29r",...,"version":"v1","totalRequests":67,...} -&gt; 200
 							{"host":"k8s-demo-vx-59844756b4-ct29r",...,"version":"v1","totalRequests":68,...} -&gt; 200
@@ -699,7 +702,7 @@ spec:
 								./get-loop.sh
 
 								# In anderem Tab Pods löschen
-								$ curl -X GET -w " -&gt; %{response_code}\n" http://k8s-demo-vx.internal/error
+								$ curl -w " -&gt; %{response_code}\n" http://k8s-demo-vx.internal/error
 							</code></pre>
 						</div>
 					</section>
@@ -779,7 +782,7 @@ spec:
 					</section>
 					<section>
 						<h2>Ingress Blue/Green Manifest</h2>
-						<pre data-id="code-animation"><code data-line-numbers="2,8|12|17" data-trim>
+						<pre data-id="code-animation"><code data-line-numbers="2,8|12|17" class="language-yaml" data-trim>
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -842,7 +845,7 @@ spec:
 						</div>
 						<div class="fragment" style="font-size: 2rem">
 							<p>Im Browser aufrufen
-								<a target="_blank" href="http://k8s-demo-blue-green.internal">http://k8s-demo-blue-green.internal</a>
+								<a href="http://k8s-demo-blue-green.internal" target="_blank">http://k8s-demo-blue-green.internal</a>
 							</p>
 						</div>
 					</section>
@@ -913,7 +916,7 @@ spec:
 					</section>
 					<section>
 						<h2>IngressRoute Manifest</h2>
-						<pre data-id="code-animation"><code data-line-numbers="2,8|13|16-18|19-21" data-trim>
+						<pre data-id="code-animation"><code data-line-numbers="2,8|13|16-18|19-21" class="language-yaml" data-trim>
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -947,7 +950,7 @@ spec:
 						</div>
 						<div class="fragment" style="font-size: 2rem">
 							<p>Im Browser mehrmals aufrufen
-								<a target="_blank" href="http://k8s-demo-canary.internal/">http://k8s-demo-canary.internal/</a>
+								<a href="http://k8s-demo-canary.internal/" target="_blank">http://k8s-demo-canary.internal/</a>
 							</p>
 						</div>
 						<div class="fragment">
@@ -974,9 +977,13 @@ spec:
 
 				<section>
 					<h1>THE END</h1>
-					<img src="./assets/DALL·E_Fragen.png" height="300" alt="Fragen">
-					<p>Fragen?</p>
-					<p style="font-size: 1rem; text-align: left;">Bild generiert von ChatGPT 4</p>
+					<div style="display: flex; justify-content: center; align-items: center;">
+						<span style="font-size: 4rem; margin-right: 50px;">Fragen?</span>
+						<figure>
+							<img src="./assets/DALL·E_Fragen.png" height="300" alt="Fragen">
+							<figcaption style="font-size: 1rem">Bild generiert von ChatGPT 4</figcaption>
+						</figure>
+					</div>
 				</section>
 
 				<section>
@@ -997,6 +1004,17 @@ spec:
 		<script src="plugin/markdown/markdown.js"></script>
 		<script src="plugin/highlight/highlight.js"></script>
 		<script src="plugin/menu/menu.js"></script>
+
+		<!-- Font awesome is required for the chalkboard plugin -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+		<!-- Custom controls plugin is used to for opening and closing annotation modes. -->
+		<script src="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/customcontrols/plugin.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/customcontrols/style.css">
+		<!-- Chalkboard plugin -->
+		<script src="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/chalkboard/plugin.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/chalkboard/style.css">
+
 		<script>
 			// More info about initialization & config:
 			// - https://revealjs.com/initialization/
@@ -1010,8 +1028,21 @@ spec:
 				// Force the scrollbar to remain visible
 				// scrollProgress: true,
 
+				customcontrols: {
+					controls: [
+						{ icon: '<i class="fa fa-pen-square"></i>',
+							title: 'Toggle chalkboard (B)',
+							action: 'RevealChalkboard.toggleChalkboard();'
+						},
+						{ icon: '<i class="fa fa-pen"></i>',
+							title: 'Toggle notes canvas (C)',
+							action: 'RevealChalkboard.toggleNotesCanvas();'
+						}
+					]
+				},
+
 				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMenu ],
+				plugins: [ RevealChalkboard, RevealCustomControls, RevealMarkdown, RevealHighlight, RevealNotes, RevealMenu ],
 
 				menu: {
 					// Specifies which side of the presentation the menu will
