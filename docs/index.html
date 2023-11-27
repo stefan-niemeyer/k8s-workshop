@@ -36,6 +36,39 @@
 						<p>Learn Kubernetes</p>
 						<p style="font-size:1.5rem;"><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/" target="_blank">https://kubernetes.io/docs/tutorials/kubernetes-basics/</a></p>
 					</section>
+					<section>
+						<h4>Navigation in der Präsentation</h4>
+						<table style="font-size: 1.8rem">
+							<tr>
+								<th>Taste</th>
+								<th>Aktion</th>
+							</tr>
+							<tr>
+								<td><i class="fas fa-arrow-right"></i> / <i class="fas fa-arrow-left"></i></td>
+								<td>Nächste/vorherige Folie</td>
+							</tr>
+							<tr>
+								<td><i class="fas fa-arrow-up"></i> / <i class="fas fa-arrow-down"></i></td>
+								<td>Nächste/vorherige vertikale Folie</td>
+							</tr>
+							<tr>
+								<td>f</td>
+								<td>Vollbildmodus ein-/ausschalten</td>
+							</tr>
+							<tr>
+								<td>ESC / o</td>
+								<td>Übersichtsmodus</td>
+							</tr>
+							<tr>
+								<td>s</td>
+								<td>Speaker View öffnen</td>
+							</tr>
+							<tr>
+								<td>.</td>
+								<td>Präsentation pausieren</td>
+							</tr>
+						</table>
+					</section>
 				</section>
 
 				<section>
@@ -332,6 +365,7 @@ spec:
         - name: npm-logs
           emptyDir: {}
 						</code></pre>
+						<aside class="notes">Auf Name des Ports hinweisen (http-app)</aside>
 					</section>
 					<section>
 						<h2>Showtime Deployment</h2>
@@ -359,6 +393,7 @@ spec:
 													  -l app=k8s-demo-vx \
 													  -o jsonpath='{.items[*].metadata.name}')
 							</code></pre>
+							<aside class="notes">Parameter -l oder --selector erläutern</aside>
 						</div>
 					</section>
 					<section>
@@ -366,7 +401,7 @@ spec:
 						<div class="fragment">
 							<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
 								# Befehl im Pod ausführen
-								$ k exec "$POD_NAME" -- env
+								$ k exec $POD_NAME -- env
 							</code></pre>
 						</div>
 						<div class="fragment">
@@ -494,6 +529,7 @@ spec:
 								NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
 								k8s-demo-vx-svc   ClusterIP   10.43.156.185   &lt;none&gt;        80/TCP    46s
 							</code></pre>
+							<aside class="notes">Es ist nur eine Cluster IP vergeben, keine External IP</aside>
 						</div>
 					</section>
 					<section>
@@ -557,6 +593,7 @@ spec:
             path: /
             pathType: Prefix
 						</code></pre>
+						<aside class="notes">Andere Ingress Controller: nginx, HA Proxy</aside>
 					</section>
 					<section>
 						<h2>Ingress benutzen</h2>
@@ -586,6 +623,14 @@ spec:
 								<a href="http://k8s-demo-vx.internal" target="_blank">http://k8s-demo-vx.internal</a>
 							</p>
 						</div>
+					</section>
+					<section>
+						<h2>Gelöst</h2>
+						<ul>
+							<li>Höhere Verfügbarkeit durch mehrere Pods und automatische Restarts</li>
+							<li>Anwendung ist von außen erreichbar</li>
+						</ul>
+						<aside class="notes">Auf livenessProbe und readinessProbe eingehen.<br>Es kann mit den Endpoints /ready und /health ausprobiert werden. </aside>
 					</section>
 				</section>
 
