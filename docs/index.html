@@ -62,8 +62,12 @@
 								<th>Aktion</th>
 							</tr>
 							<tr>
+								<td>Leertaste</td>
+								<td>Nächste Folie</td>
+							</tr>
+							<tr>
 								<td><i class="fas fa-arrow-right"></i> / <i class="fas fa-arrow-left"></i></td>
-								<td>Nächste/vorherige Folie</td>
+								<td>Nächste/vorherige horizontale Folie</td>
 							</tr>
 							<tr>
 								<td><i class="fas fa-arrow-up"></i> / <i class="fas fa-arrow-down"></i></td>
@@ -86,6 +90,7 @@
 								<td>Präsentation pausieren</td>
 							</tr>
 						</table>
+						<aside class="notes">Anordnung der Folien zeigen</aside>
 					</section>
 				</section>
 
@@ -425,7 +430,7 @@ spec:
 						<div class="fragment">
 							<pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
 								# Shell im Pod öffnen
-								$ k exec -ti $POD_NAME -- bash
+								$ k exec -it $POD_NAME -- bash
 							</code></pre>
 						</div>
 						<div class="fragment">
@@ -456,7 +461,7 @@ spec:
 							<pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
 								# In anderem Tab
 								$ export POD_NAME="$(kubectl get pods -l app=k8s-demo-vx -o jsonpath='{.items[*].metadata.name}')"
-								$ k exec -ti $POD_NAME -- curl -w " -> %{response_code}\n" http://localhost:3000/error
+								$ k exec -it $POD_NAME -- curl -w " -> %{response_code}\n" http://localhost:3000/error
 							</code></pre>
 						</div>
 						<div class="fragment">
@@ -1039,25 +1044,37 @@ spec:
 				</section>
 
 				<section>
-					<h1>THE END</h1>
-					<div style="display: flex; justify-content: center; align-items: center;">
-						<span style="font-size: 4rem; margin-right: 50px;">Fragen?<br>Feedback</span>
-						<figure>
-							<img src="./assets/DALL·E_Fragen.png" height="300" alt="Fragen">
-							<figcaption style="font-size: 1rem">Bild generiert von ChatGPT 4</figcaption>
-						</figure>
-					</div>
-				</section>
-
-				<section>
-					<h2>Links</h2>
-					<ul style="font-size: 1.7rem">
-						<li>Kubernetes <a href="https://kubernetes.io/" target="_blank">https://kubernetes.io/</a></li>
-						<li>K3s (leichtgewichtiges K8s) <a href="https://k3s.io/" target="_blank">https://k3s.io/</a></li>
-						<li>K9s (CLI Tool) <a href="https://k9scli.io/" target="_blank">https://k9scli.io/</a></li>
-						<li>revealjs <a href="https://revealjs.com/" target="_blank">https://revealjs.com/</a></li>
-						<li>revealjs-menu <a href="https://github.com/denehyg/reveal.js-menu" target="_blank">https://github.com/denehyg/reveal.js-menu</a></li>
-					</ul>
+					<section>
+						<h2>Ausblick</h2>
+						<ul style="font-size: 1.7rem">
+							<li>Health / Readiness Probes</li>
+							<li>Persistenz mit Persistent Volume Claims</li>
+							<li>Stateful Sets</li>
+							<li>ConfigMap / Secrets</li>
+							<li>Jobs / CronJobs</li>
+						</ul>
+					</section>
+					<section>
+						<h1>THE END</h1>
+						<div style="display: flex; justify-content: center; align-items: center;">
+							<span style="font-size: 4rem; margin-right: 50px;">Fragen?<br>Feedback</span>
+							<figure>
+								<img src="./assets/DALL·E_Fragen.png" height="300" alt="Fragen">
+								<figcaption style="font-size: 1rem">Bild generiert von ChatGPT 4</figcaption>
+							</figure>
+						</div>
+					</section>
+					<section>
+						<h2>Links</h2>
+						<ul style="font-size: 1.7rem">
+							<li>Kubernetes <a href="https://kubernetes.io/" target="_blank">https://kubernetes.io/</a></li>
+							<li>K3s (leichtgewichtiges K8s) <a href="https://k3s.io/" target="_blank">https://k3s.io/</a></li>
+							<li>K9s (CLI Tool) <a href="https://k9scli.io/" target="_blank">https://k9scli.io/</a></li>
+							<li>revealjs <a href="https://revealjs.com/" target="_blank">https://revealjs.com/</a></li>
+							<li>revealjs-menu <a href="https://github.com/denehyg/reveal.js-menu" target="_blank">https://github.com/denehyg/reveal.js-menu</a></li>
+							<li>Chalkboard <a href="https://github.com/rajgoel/reveal.js-plugins/tree/master/chalkboard" target="_blank">https://github.com/rajgoel/reveal.js-plugins/tree/master/chalkboard</a></li>
+						</ul>
+					</section>
 				</section>
 			</div>
 		</div>
