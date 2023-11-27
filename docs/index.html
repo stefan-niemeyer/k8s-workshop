@@ -16,11 +16,29 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section data-markdown>
-					# Kubernetes Workshop
-				</section>
-
 				<section>
+					<section data-markdown>
+						# Kubernetes Workshop
+					</section>
+					<section id="uebersicht">
+						<h2>Vorstellungsrunde</h2>
+						<ul>
+							<li class="fragment">Wer erzählt heute was?</li>
+							<li class="fragment">Teilnehmer Vorstellungsrunde<br>
+								<ul>
+									<li>Name (bitte Namensschild aufstellen)</li>
+									<li>schon mit Docker/Kubernetes zu tun gehabt</li>
+								</ul>
+						</ul>
+					</section>
+					<section data-markdown>
+						## Zeitplan
+						- 12:30 - 14:00 Teil 1
+						- 14:00 - 14:10 Pause
+						- 14:10 - 15:30 Teil 2
+						- 15:30 - 15:40 Pause
+						- 15:40 - 16:30 Teil 3
+					</section>
 					<section id="inhalt">
 						<h2>Workshop Inhalt</h2>
 						<p class="fragment">Wie kann eine Anwendung resilient betrieben werden, damit sie auch nach Abstürzen weiterhin verfügbar ist?</p>
@@ -982,7 +1000,7 @@ spec:
           weight: 80  # 80% der Anfragen an k8s-demo-vx-svc
         - name: k8s-demo-canary-svc
           port: http
-          weight: 20  # 10% der Anfragen an k8s-demo-canary-svc
+          weight: 20  # 20% der Anfragen an k8s-demo-canary-svc
 						</code></pre>
 					</section>
 					<section>
@@ -1023,7 +1041,7 @@ spec:
 				<section>
 					<h1>THE END</h1>
 					<div style="display: flex; justify-content: center; align-items: center;">
-						<span style="font-size: 4rem; margin-right: 50px;">Fragen?</span>
+						<span style="font-size: 4rem; margin-right: 50px;">Fragen?<br>Feedback</span>
 						<figure>
 							<img src="./assets/DALL·E_Fragen.png" height="300" alt="Fragen">
 							<figcaption style="font-size: 1rem">Bild generiert von ChatGPT 4</figcaption>
