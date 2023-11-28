@@ -1,0 +1,104 @@
+<section data-markdown id="rolling-update">
+    ## Rolling Update
+    - Es soll eine neue Version ausgerollt werden.
+    - Dabei soll die Anwendung während des Deployments lückenlos verfügbar bleiben.
+</section>
+<section>
+    <h2>#Replicas = 1</h2>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Anwendung in Schleife aufrufen
+								./get-loop.sh
+							</code></pre>
+    </div>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# In anderem Tab Deployment aktualisieren
+								$ k set image deploy/k8s-demo-vx backend=ghcr.io/stefan-niemeyer/k8s-demo/k8s-demo:v2
+							</code></pre>
+    </div>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								$ k get pods -w
+								NAME                           READY   STATUS              RESTARTS   AGE
+								k8s-demo-vx-56bc795557-kdzjw   1/1     Running             0          93s
+								k8s-demo-vx-84454c4c9d-2q8bh   0/1     ContainerCreating   0          6s
+								k8s-demo-vx-84454c4c9d-2q8bh   0/1     Running             0          21s
+								k8s-demo-vx-84454c4c9d-2q8bh   1/1     Running             0          31s
+								k8s-demo-vx-56bc795557-kdzjw   1/1     Terminating         0          118s
+							</code></pre>
+    </div>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Historie des Deployments anschauen
+								$ k rollout history deployment/k8s-demo-vx
+							</code></pre>
+    </div>
+</section>
+<section>
+    <h2>Rolling Update Ergebnis</h2>
+    <pre data-id="code-animation"><code style="font-size:1rem;" class="language-json" data-trim>
+							{"host":"k8s-demo-vx-59844756b4-ct29r",...,"version":"v1","totalRequests":67,...} -&gt; 200
+							{"host":"k8s-demo-vx-59844756b4-ct29r",...,"version":"v1","totalRequests":68,...} -&gt; 200
+							{"host":"k8s-demo-vx-56bc795557-kdzjw",...,"version":"v2","totalRequests":1,...} -&gt; 200
+							{"host":"k8s-demo-vx-59844756b4-ct29r",...,"version":"v1","totalRequests":69,...} -&gt; 200
+							{"host":"k8s-demo-vx-56bc795557-kdzjw",...,"version":"v2","totalRequests":2,...} -&gt; 200
+							{"host":"k8s-demo-vx-56bc795557-kdzjw",...,"version":"v2","totalRequests":3,...} -&gt; 200
+						</code></pre>
+    <ul style="font-size:1.5rem;">
+        <li>Neue Version ist ausgerollt, siehe 'version' in der Antwort</li>
+        <li>Anzahl Request ist wieder bei 1</li>
+        <li>Evtl. stehen kurzfristig die beiden Versionen parallel zur Verfügung</li>
+    </ul>
+</section>
+<section>
+    <h2>Skalieren</h2>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								$ k get replicaset
+								NAME                       DESIRED   CURRENT   READY   AGE
+								k8s-demo-vx-57b5dcd478     1         1         1       1h
+							</code></pre>
+    </div>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								$ k scale deployments/k8s-demo-vx --replicas=4
+							</code></pre>
+    </div>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								$ kubectl get pods -o wide
+								NAME                           READY   STATUS    RESTARTS   AGE   IP
+								k8s-demo-vx-84454c4c9d-2q8bh   1/1     Running   0          17m   10.42.0.56
+								k8s-demo-vx-84454c4c9d-559b8   1/1     Running   0          87s   10.42.0.57
+								k8s-demo-vx-84454c4c9d-vgc8w   1/1     Running   0          87s   10.42.0.59
+								k8s-demo-vx-84454c4c9d-94lb8   1/1     Running   0          87s   10.42.0.58
+
+								# Die Pods haben eigene IP-Adressen im Cluster
+							</code></pre>
+    </div>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								$ k get rs
+								NAME                     DESIRED   CURRENT   READY   AGE
+								k8s-demo-vx-57b5dcd478   4         4         4       1h
+							</code></pre>
+    </div>
+</section>
+<section>
+    <h2>Ausfallsicherheit testen</h2>
+    <div>
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Anwendung in Schleife aufrufen
+								./get-loop.sh
+
+								# In anderem Tab Pods löschen
+								$ curl -w " -&gt; %{response_code}\n" http://k8s-demo-vx.internal/error
+							</code></pre>
+    </div>
+</section>
+<section data-markdown>
+    ## Gelöst
+    - Die Verfügbarkeit der Anwendung ist höher
+    - Der Neustart eines Pods führt nicht zu einem Ausfall
+</section>

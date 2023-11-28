@@ -1,0 +1,89 @@
+<section id="service">
+    <h1>Service</h1>
+    <ul style="font-size: 1.8rem">
+        <li>Abstraktionsschicht für eine Menge an Pods</li>
+        <li>ermöglicht Zugriff von außerhalb des Clusters</li>
+        <li>kann Load Balancing</li>
+    </ul>
+    <figure>
+        <img src="./assets/service.svg" height="300" alt="Service">
+        <figcaption style="font-size: 1rem">Quellenangabe: <a>https://kubernetes.io/docs/tutorials/kubernetes-basics/expose/expose-intro/</a></figcaption>
+    </figure>
+</section>
+<section>
+    <h2>Service Manifest</h2>
+    <pre data-id="code-animation"><code data-line-numbers="2,4|10,11|13-15" class="language-yaml" data-trim>
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-demo-vx-svc
+  labels:
+    app: k8s-demo-vx
+    app.kubernetes.io/name: k8s-demo-vx-svc
+    app.kubernetes.io/component: server
+spec:
+  selector:
+    app: k8s-demo-vx
+  ports:
+    - name: http
+      port: 80
+      targetPort: http-app
+						</code></pre>
+</section>
+<section>
+    <h2>Service anlegen</h2>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Services anzeigen lassen
+								$ k get services
+								No resources found in workshop namespace.
+							</code></pre>
+    </div>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Service anlegen
+								$ k apply -f k8s-demo-vx-service.yaml
+								service/k8s-demo-vx-svc created
+							</code></pre>
+    </div>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								$ k get svc
+								NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+								k8s-demo-vx-svc   ClusterIP   10.43.156.185   &lt;none&gt;        80/TCP    46s
+							</code></pre>
+        <aside class="notes">Es ist nur eine Cluster IP vergeben, keine External IP</aside>
+    </div>
+</section>
+<section>
+    <h2>Service benutzen</h2>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
+								# Alias für Hilfspod erzeugen
+								$ alias ktools='kubectl run tools --rm -it --image wbitt/network-multitool -- /bin/bash'
+								$ ktools
+							</code></pre>
+    </div>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:0.8rem;" class="language-console" data-trim>
+								# Anwendung innerhalb des Clusters über Service aufrufen
+								$ curl -w " -&gt; %{response_code}\n" http://k8s-demo-vx-svc/state
+								$ for i in {1..120}; do curl -w " -&gt; %{response_code}\n" http://k8s-demo-vx-svc/state; sleep 1; done
+							</code></pre>
+    </div>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
+								# Pod von anderem Tab aus löschen
+								$ k delete pod -l app=k8s-demo-vx
+							</code></pre>
+    </div>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-plaintext" data-trim>
+								# In dem Hilfspod sieht man einen Wechsel des Hostnamens
+								# {"host":"k8s-demo-vx-5dccdc4db6-4km5w",...,"totalRequests":26,...} -&gt; 200
+								# {"host":"k8s-demo-vx-5dccdc4db6-zcv5g",...,"totalRequests":1,...} -&gt; 200
+
+								# "host" ändert sich und "totalRequests" beginnt bei 1
+							</code></pre>
+    </div>
+</section>

@@ -1,0 +1,65 @@
+<section id="ingress">
+    <h2>Ingress Manifest</h2>
+    <p>App noch nicht von außerhalb des Clusters erreichbar</p>
+    <pre class="fragment" data-id="code-animation"><code data-line-numbers="2,8|10|12|16-19" class="language-yaml" data-trim>
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: k8s-demo-vx
+    app.kubernetes.io/name: k8s-demo-vx-ingress
+    app.kubernetes.io/component: server
+  name: k8s-demo-vx-ingress
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: k8s-demo-vx.internal
+      http:
+        paths:
+          - backend:
+              service:
+                name: k8s-demo-vx-svc
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+						</code></pre>
+    <aside class="notes">Andere Ingress Controller: nginx, HA Proxy</aside>
+</section>
+<section>
+    <h2>Ingress benutzen</h2>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Ingress anlegen
+								$ k apply -f k8s-demo-vx-ingress.yaml
+							</code></pre>
+    </div>
+    <div class="fragment">
+							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+								# Aufruf der Anwendung von außerhalb über den Hostnamen k8s-demo-vx.internal
+								$ curl -w " -&gt; %{response_code}\n" http://k8s-demo-vx.internal/state
+							</code></pre>
+    </div>
+    <div class="fragment">
+        <p>/etc/hosts erweitern</p>
+        <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+							$ sudo nano /etc/hosts
+							</code></pre>
+        <pre data-id="code-animation"><code style="font-size:1rem;" class="language-plaintext" data-trim>
+							127.0.0.1 k8s-demo-vx.internal k8s-demo-blue-green.internal k8s-demo-canary.internal
+							</code></pre>
+    </div>
+    <div class="fragment" style="font-size: 2rem">
+        <p>Im Browser aufrufen
+            <a href="http://k8s-demo-vx.internal" target="_blank">http://k8s-demo-vx.internal</a>
+        </p>
+    </div>
+</section>
+<section>
+    <h2>Gelöst</h2>
+    <ul>
+        <li>Höhere Verfügbarkeit durch mehrere Pods und automatische Restarts</li>
+        <li>Anwendung ist von außen erreichbar</li>
+    </ul>
+    <aside class="notes">Auf livenessProbe und readinessProbe eingehen.<br>Es kann mit den Endpoints /ready und /health ausprobiert werden. </aside>
+</section>

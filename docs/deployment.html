@@ -1,0 +1,200 @@
+<section data-markdown id="deployment">
+    <script type="text/template">
+        ## Deployment
+        - Kümmert sich um das Vorhandensein einer definierten Anzahl von Pods <!-- .element: class="fragment" -->
+        - Gewünschte Anzahl an Pods wird über ein ReplicaSet sichergestellt <!-- .element: class="fragment" -->
+        - Ein Deployment hat eine Versionsverwaltung <!-- .element: class="fragment" -->
+    </script>
+</section>
+<section>
+    <h2>kubectl</h2>
+    <p>Zugriff auf den Cluster per CLI</p>
+    <p><q>The canonical pronunciation of kubectl<br>is "cube control"</q></p>
+    <p style="font-size:1.5rem;"><a href="https://github.com/kubernetes/kubernetes/blob/release-1.9/CHANGELOG-1.9.md" target="_blank">https://github.com/kubernetes/kubernetes/blob/release-1.9/CHANGELOG-1.9.md</a></p>
+</section>
+<section>
+    <h2>Deployment Manifest</h2>
+    <pre data-id="code-animation"><code data-line-numbers="2,4|11|28-30|33-34" class="language-yaml" data-trim>
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-demo-vx
+  labels:
+    app: k8s-demo-vx
+    app.kubernetes.io/name: k8s-demo-vx
+    app.kubernetes.io/component: server
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: k8s-demo-vx
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: k8s-demo-vx
+        app.kubernetes.io/name: k8s-demo-vx
+        app.kubernetes.io/component: server
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/stefan-niemeyer/k8s-demo/k8s-demo:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http-app
+              containerPort: 3000
+              protocol: TCP
+          volumeMounts:
+            - name: npm-logs
+              mountPath: /home/node/.npm
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: http-app
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          readinessProbe:
+            failureThreshold: 1
+            httpGet:
+              path: /ready
+              port: http-app
+              scheme: HTTP
+            periodSeconds: 10
+            initialDelaySeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            requests:
+              cpu: 7m
+              memory: 200Mi
+            limits:
+              cpu: 100m
+              memory: 1024Mi
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            privileged: false
+            runAsNonRoot: true
+      enableServiceLinks: false
+      automountServiceAccountToken: false
+      volumes:
+        - name: npm-logs
+          emptyDir: {}
+                    </code></pre>
+    <aside class="notes">Auf Name des Ports hinweisen (http-app)</aside>
+</section>
+<section>
+    <h2>Showtime Deployment</h2>
+    <div class="fragment">
+                        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+                            # Deployment anlegen
+                            $ k apply -f k8s-demo-vx-deploy.yaml
+                            deployment.apps/k8s-demo-vx created
+                        </code></pre>
+    </div>
+    <div class="fragment">
+                        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+                            # Deployment anzeigen
+                            $ k get deployments -w
+                            NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+                            k8s-demo-vx   0/1     1            0           17s
+                            k8s-demo-vx   1/1     1            1           21s
+                            # Mit Strg-C beenden
+                        </code></pre>
+    </div>
+    <div class="fragment">
+                        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-plaintext" data-trim>
+                            # Name des Pods in Umgebungsvariable speichern
+                            $ export POD_NAME=$(kubectl get pods \
+                                                  -l app=k8s-demo-vx \
+                                                  -o jsonpath='{.items[*].metadata.name}')
+                        </code></pre>
+        <aside class="notes">Parameter -l oder --selector erläutern</aside>
+    </div>
+</section>
+<section>
+    <h2>Arbeiten mit dem Pod</h2>
+    <div class="fragment">
+                        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+                            # Befehl im Pod ausführen
+                            $ k exec $POD_NAME -- env
+                        </code></pre>
+    </div>
+    <div class="fragment">
+                        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+                            # Shell im Pod öffnen
+                            $ k exec -it $POD_NAME -- bash
+                        </code></pre>
+    </div>
+    <div class="fragment">
+                        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+                            # Im Pod (Der Prompt sieht anders aus)
+                            $ ps
+                            $ cat src/server.js
+                            $ curl -w " -> %{response_code}\n" http://localhost:3000/state
+                        </code></pre>
+    </div>
+    <div class="fragment">
+                        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+                            # Shell im Pod beenden
+                            $ exit
+                        </code></pre>
+    </div>
+</section>
+<section>
+    <h2>Pod Neustart</h2>
+    <div class="fragment">
+                        <pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
+                            $ k get pods -o wide -w
+                            NAME                           READY   STATUS    RESTARTS   AGE     IP
+                            k8s-demo-vx-5dccdc4db6-4km5w   1/1     Running   0          4m56s   10.42.0.15
+                        </code></pre>
+    </div>
+    <div class="fragment">
+                        <pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
+                            # In anderem Tab
+                            $ export POD_NAME="$(kubectl get pods -l app=k8s-demo-vx -o jsonpath='{.items[*].metadata.name}')"
+                            $ k exec -it $POD_NAME -- curl -w " -> %{response_code}\n" http://localhost:3000/error
+                        </code></pre>
+    </div>
+    <div class="fragment">
+                        <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+                            # Neue Ausgabe von: kubectl get pods -o wide -w
+                            NAME                           READY   STATUS    RESTARTS      AGE
+                            k8s-demo-vx-5dccdc4db6-4km5w   1/1     Running   0             4m56s
+                            k8s-demo-vx-5dccdc4db6-4km5w   0/1     Error     0             6m45s
+                            k8s-demo-vx-5dccdc4db6-4km5w   0/1     Running   1 (2s ago)    6m46s
+                            k8s-demo-vx-5dccdc4db6-4km5w   1/1     Running   1 (17s ago)   7m1s
+                        </code></pre>
+    </div>
+</section>
+<section data-markdown>
+    <script type="text/template">
+        ## Gelöst
+        - Der Pod (die Anwendung) wird im Fehlerfall automatisch neu gestartet <!-- .element: class="fragment" -->
+        - Es gibt allerdings eine kurze Ausfallzeit <!-- .element: class="fragment" -->
+    </script>
+</section>
+<section>
+    <h2>Offene Probleme</h2>
+    <ul>
+        <li>Der Pod ist von außen noch nicht verfügbar</li>
+        <li>Der Name des Pods ist nicht stabil<br>
+            <span style="font-size: 1.7rem">Wenn der Pod gelöscht wird, bekommt der Neue einen anderen Namen</span>
+        </li>
+    </ul>
+</section>
+<section data-markdown>
+    ## Fehlende Lösungen
+    - Wie kann die Anwendung von außerhalb des Clusters aufgerufen werden?
+</section>

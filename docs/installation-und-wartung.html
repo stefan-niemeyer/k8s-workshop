@@ -1,0 +1,33 @@
+<section data-markdown>
+    # Installation und Wartung
+</section>
+<section data-markdown>
+    ## Ausgangssituation
+
+    Anwendung läuft auf Server.
+
+    Sie benötigt ein Betriebssystem, Bibliotheken (z.B. für DB-Zugriff)
+    und evtl. Laufzeitumgebungen wie Java Runtime, Node.JS, Python, ...
+</section>
+<section data-markdown>
+    ##  Installation
+
+    - Betriebssystem, Bibliotheken und Laufzeitumgebungen
+    - Anwendung selbst
+    - Die notwendigen Schritte müssen exakt ausgeführt werden oder automatisiert werden, z.B. mit Ansible
+</section>
+<section data-markdown>
+    <script type="text/template">
+        ## Herausforderungen
+        - Bei so vielen Komponenten kann ein Versionsunterschied oder eine Abweichung bei der Installation dazu führen, dass die Anwendung nicht mehr läuft <!-- .element: class="fragment" -->
+        - Auf dem Server laufen evtl. weitere Anwendungen, wodurch Konflikte entstehen könnten <!-- .element: class="fragment" -->
+        - Als Entwickler*in möchte ich die Anwendung auf meinem Rechner installieren können, um sie zu testen <!-- .element: class="fragment" -->
+    </script>
+</section>
+<section data-markdown>
+    <script type="text/template">
+        ## Wartungsaufgaben
+        - Updates oder Security-Patches (OS, Libs, Runtime, App) müssen regelmäßig installiert werden <!-- .element: class="fragment" -->
+        - Die Updates sollen während des Betriebs installiert werden, ohne dass die Anwendung ausfällt <!-- .element: class="fragment" -->
+    </script>
+</section>

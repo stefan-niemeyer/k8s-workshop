@@ -1,0 +1,45 @@
+<section data-markdown id="setup">
+    # Setup
+</section>
+<section data-menu-title="git">
+    <p>git installiert?</p>
+    <pre data-id="code-animation"><code class="language-console" data-trim>
+                        $ sudo apt install git
+                    </code></pre>
+    <div class="fragment">
+        <p>Workshop-Repo klonen</p>
+        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+                            $ git clone https://github.com/stefan-niemeyer/k8s-workshop.git
+                        </code></pre>
+    </div>
+</section>
+<section data-menu-title="K8s Rechte kopieren">
+    <p>K8s Rechte kopieren</p>
+    <pre data-id="code-animation"><code class="language-console" data-trim>
+                        $ cd
+                        $ mkdir .kube
+                        $ cd .kube
+                        $ sudo cp /etc/rancher/k3s/k3s.yaml config
+                        $ sudo chown k3s:k3s config
+                        $ cd
+                    </code></pre>
+</section>
+<section data-menu-title="bashrc erweitern">
+    <p>.bashrc erweitern</p>
+    <pre data-id="code-animation"><code class="language-console" data-trim>
+                        $ nano .bashrc
+                    </code></pre>
+    <div class="fragment">
+        <p>Zeilen eintragen</p>
+        <pre data-id="code-animation"><code class="language-bash" data-trim>
+                            export KUBECONFIG=$HOME/.kube/config
+                            alias k=kubectl
+                        </code></pre>
+        <div class="fragment">
+            <p>Neuer Tab oder .bashrc neu laden</p>
+            <pre data-id="code-animation"><code class="language-console" data-trim>
+                                $ source .bashrc
+                            </code></pre>
+        </div>
+    </div>
+</section>
