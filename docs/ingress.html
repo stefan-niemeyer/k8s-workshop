@@ -13,7 +13,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: k8s-demo-vx.internal
+    - host: vx.internal
       http:
         paths:
           - backend:
@@ -23,35 +23,35 @@ spec:
                   name: http
             path: /
             pathType: Prefix
-						</code></pre>
+    </code></pre>
     <aside class="notes">Andere Ingress Controller: nginx, HA Proxy</aside>
 </section>
 <section>
     <h2>Ingress benutzen</h2>
     <div class="fragment">
-							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-								# Ingress anlegen
-								$ k apply -f k8s-demo-vx-ingress.yaml
-							</code></pre>
+        <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+            # Ingress anlegen
+            $ k apply -f k8s-demo-vx-ingress.yaml
+        </code></pre>
     </div>
     <div class="fragment">
-							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-								# Aufruf der Anwendung von außerhalb über den Hostnamen k8s-demo-vx.internal
-								$ curl -w " -&gt; %{response_code}\n" http://k8s-demo-vx.internal/state
-							</code></pre>
+        <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+            # Aufruf der Anwendung von außerhalb über den Hostnamen vx.internal
+            $ curl -w " -&gt; %{response_code}\n" http://vx.internal/state
+        </code></pre>
     </div>
     <div class="fragment">
         <p>/etc/hosts erweitern</p>
         <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-							$ sudo nano /etc/hosts
-							</code></pre>
+            $ sudo nano /etc/hosts
+        </code></pre>
         <pre data-id="code-animation"><code style="font-size:1rem;" class="language-plaintext" data-trim>
-							127.0.0.1 k8s-demo-vx.internal k8s-demo-blue-green.internal k8s-demo-canary.internal
-							</code></pre>
+            127.0.0.1 vx.internal blue-green.internal canary.internal
+        </code></pre>
     </div>
     <div class="fragment" style="font-size: 2rem">
         <p>Im Browser aufrufen
-            <a href="http://k8s-demo-vx.internal" target="_blank">http://k8s-demo-vx.internal</a>
+            <a href="http://vx.MEINE-VM.laserschwert.io" target="_blank">http://vx.MEINE-VM.laserschwert.io</a>
         </p>
     </div>
 </section>

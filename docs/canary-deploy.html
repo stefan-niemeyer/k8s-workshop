@@ -1,12 +1,12 @@
 <section>
     <h2>Canary ausrollen</h2>
     <div>
-							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-								# Version 'canary' ausrollen
-								$ k apply -f k8s-demo-canary.yaml
-								deployment.apps/k8s-demo-canary created
-								service/k8s-demo-canary-svc created
-							</code></pre>
+        <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+            # Version 'canary' ausrollen
+            $ k apply -f k8s-demo-canary.yaml
+            deployment.apps/k8s-demo-canary created
+            service/k8s-demo-canary-svc created
+        </code></pre>
     </div>
 </section>
 <section>
@@ -24,7 +24,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`k8s-demo-canary.internal`)
+    - match: Host(`canary.internal`)
       kind: Rule
       services:
         - name: k8s-demo-vx-svc
@@ -33,26 +33,26 @@ spec:
         - name: k8s-demo-canary-svc
           port: http
           weight: 20  # 20% der Anfragen an k8s-demo-canary-svc
-						</code></pre>
+    </code></pre>
 </section>
 <section>
     <h2>IngresRoute ausrollen</h2>
     <div>
-							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-								# IngressRoute anlegen mit Aufteilung zwischen Services 80/20
-								$ k apply -f k8s-demo-canary-ingress-route.yaml
-							</code></pre>
+        <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+            # IngressRoute anlegen mit Aufteilung zwischen Services 80/20
+            $ k apply -f k8s-demo-canary-ingress-route.yaml
+        </code></pre>
     </div>
     <div class="fragment" style="font-size: 2rem">
         <p>Im Browser mehrmals aufrufen
-            <a href="http://k8s-demo-canary.internal/" target="_blank">http://k8s-demo-canary.internal/</a>
+            <a href="http://canary.MEINE-VM.laserschwert.io/" target="_blank">http://canary.MEINE-VM.laserschwert.io/</a>
         </p>
     </div>
     <div class="fragment">
-							<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-								# Anwendung in Schleife aufrufen
-								$ ./get-loop.sh canary
-							</code></pre>
+        <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+            # Anwendung in Schleife aufrufen
+            $ ./get-loop.sh canary
+        </code></pre>
         <pre data-id="code-animation"><code style="font-size:1rem;" class="language-json" data-trim>
 {"host":"k8s-demo-vx-56bc795557-stkt2",...,"version":"v2","totalRequests":234,...}
 {"host":"k8s-demo-vx-56bc795557-v5rs9",...,"version":"v2","totalRequests":236,...}
@@ -65,6 +65,6 @@ spec:
 {"host":"k8s-demo-vx-56bc795557-4p99r",...,"version":"v2","totalRequests":238,...}
 {"host":"k8s-demo-canary-5c76669fc-5mx52",...,"version":"canary","totalRequests":31,...}
 {"host":"k8s-demo-vx-56bc795557-stkt2",...,"version":"v2","totalRequests":236,...}
-							</code></pre>
+        </code></pre>
     </div>
 </section>

@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: k8s-demo-vx.internal
+    - host: vx.DOMAIN_PLACEHOLDER
       http:
         paths:
           - backend:

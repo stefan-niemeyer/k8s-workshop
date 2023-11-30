@@ -18,6 +18,13 @@ data:
         ${INGRESS_HOST} internal
       }
     }
+  laserschwert.server: |
+    laserschwert.io:53 {
+      rewrite name regex .*\.laserschwert\.io laserschwert.io
+      hosts {
+        ${INGRESS_HOST} laserschwert.io
+      }
+    }
 EOF
 
 kubectl rollout restart -n kube-system deployment/coredns

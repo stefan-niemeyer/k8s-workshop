@@ -10,7 +10,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`k8s-demo-canary.internal`)
+    - match: Host(`canary.DOMAIN_PLACEHOLDER`)
       kind: Rule
       services:
         - name: k8s-demo-vx-svc
@@ -18,4 +18,4 @@ spec:
           weight: 80  # 80% der Anfragen an k8s-demo-vx-svc
         - name: k8s-demo-canary-svc
           port: http
-          weight: 20  # 10% der Anfragen an k8s-demo-canary-svc
+          weight: 20  # 20% der Anfragen an k8s-demo-canary-svc

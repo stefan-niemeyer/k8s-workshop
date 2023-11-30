@@ -90,92 +90,92 @@ spec:
       volumes:
         - name: npm-logs
           emptyDir: {}
-                    </code></pre>
+        </code></pre>
     <aside class="notes">Auf Name des Ports hinweisen (http-app)</aside>
 </section>
 <section>
     <h2>Showtime Deployment</h2>
     <div class="fragment">
-                        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-                            # Deployment anlegen
-                            $ k apply -f k8s-demo-vx-deploy.yaml
-                            deployment.apps/k8s-demo-vx created
-                        </code></pre>
+        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+            # Deployment anlegen
+            $ k apply -f k8s-demo-vx-deploy.yaml
+            deployment.apps/k8s-demo-vx created
+        </code></pre>
     </div>
     <div class="fragment">
-                        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-                            # Deployment anzeigen
-                            $ k get deployments -w
-                            NAME          READY   UP-TO-DATE   AVAILABLE   AGE
-                            k8s-demo-vx   0/1     1            0           17s
-                            k8s-demo-vx   1/1     1            1           21s
-                            # Mit Strg-C beenden
-                        </code></pre>
+        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+            # Deployment anzeigen
+            $ k get deployments -w
+            NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+            k8s-demo-vx   0/1     1            0           17s
+            k8s-demo-vx   1/1     1            1           21s
+            # Mit Strg-C beenden
+        </code></pre>
     </div>
     <div class="fragment">
-                        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-plaintext" data-trim>
-                            # Name des Pods in Umgebungsvariable speichern
-                            $ export POD_NAME=$(kubectl get pods \
-                                                  -l app=k8s-demo-vx \
-                                                  -o jsonpath='{.items[*].metadata.name}')
-                        </code></pre>
+        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-plaintext" data-trim>
+            # Name des Pods in Umgebungsvariable speichern
+            $ export POD_NAME=$(kubectl get pods \
+                                  -l app=k8s-demo-vx \
+                                  -o jsonpath='{.items[*].metadata.name}')
+        </code></pre>
         <aside class="notes">Parameter -l oder --selector erläutern</aside>
     </div>
 </section>
 <section>
     <h2>Arbeiten mit dem Pod</h2>
     <div class="fragment">
-                        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-                            # Befehl im Pod ausführen
-                            $ k exec $POD_NAME -- env
-                        </code></pre>
+        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+            # Befehl im Pod ausführen
+            $ k exec $POD_NAME -- env
+        </code></pre>
     </div>
     <div class="fragment">
-                        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-                            # Shell im Pod öffnen
-                            $ k exec -it $POD_NAME -- bash
-                        </code></pre>
+        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+            # Shell im Pod öffnen
+            $ k exec -it $POD_NAME -- bash
+        </code></pre>
     </div>
     <div class="fragment">
-                        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-                            # Im Pod (Der Prompt sieht anders aus)
-                            $ ps
-                            $ cat src/server.js
-                            $ curl -w " -> %{response_code}\n" http://localhost:3000/state
-                        </code></pre>
+        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+            # Im Pod (Der Prompt sieht anders aus)
+            $ ps
+            $ cat src/server.js
+            $ curl -w " -> %{response_code}\n" http://localhost:3000/state
+        </code></pre>
     </div>
     <div class="fragment">
-                        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-                            # Shell im Pod beenden
-                            $ exit
-                        </code></pre>
+        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+            # Shell im Pod beenden
+            $ exit
+        </code></pre>
     </div>
 </section>
 <section>
     <h2>Pod Neustart</h2>
     <div class="fragment">
-                        <pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
-                            $ k get pods -o wide -w
-                            NAME                           READY   STATUS    RESTARTS   AGE     IP
-                            k8s-demo-vx-5dccdc4db6-4km5w   1/1     Running   0          4m56s   10.42.0.15
-                        </code></pre>
+        <pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
+            $ k get pods -o wide -w
+            NAME                           READY   STATUS    RESTARTS   AGE     IP
+            k8s-demo-vx-5dccdc4db6-4km5w   1/1     Running   0          4m56s   10.42.0.15
+        </code></pre>
     </div>
     <div class="fragment">
-                        <pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
-                            # In anderem Tab
-                            $ export POD_NAME="$(kubectl get pods -l app=k8s-demo-vx -o jsonpath='{.items[*].metadata.name}')"
-                            $ k exec -it $POD_NAME -- curl -w " -> %{response_code}\n" http://localhost:3000/error
-                        </code></pre>
+        <pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
+            # In anderem Tab
+            $ export POD_NAME="$(kubectl get pods -l app=k8s-demo-vx -o jsonpath='{.items[*].metadata.name}')"
+            $ k exec -it $POD_NAME -- curl -w " -> %{response_code}\n" http://localhost:3000/error
+        </code></pre>
     </div>
     <div class="fragment">
-                        <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-                            # Neue Ausgabe von: kubectl get pods -o wide -w
-                            NAME                           READY   STATUS    RESTARTS      AGE
-                            k8s-demo-vx-5dccdc4db6-4km5w   1/1     Running   0             4m56s
-                            k8s-demo-vx-5dccdc4db6-4km5w   0/1     Error     0             6m45s
-                            k8s-demo-vx-5dccdc4db6-4km5w   0/1     Running   1 (2s ago)    6m46s
-                            k8s-demo-vx-5dccdc4db6-4km5w   1/1     Running   1 (17s ago)   7m1s
-                        </code></pre>
+        <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+            # Neue Ausgabe von: kubectl get pods -o wide -w
+            NAME                           READY   STATUS    RESTARTS      AGE
+            k8s-demo-vx-5dccdc4db6-4km5w   1/1     Running   0             4m56s
+            k8s-demo-vx-5dccdc4db6-4km5w   0/1     Error     0             6m45s
+            k8s-demo-vx-5dccdc4db6-4km5w   0/1     Running   1 (2s ago)    6m46s
+            k8s-demo-vx-5dccdc4db6-4km5w   1/1     Running   1 (17s ago)   7m1s
+        </code></pre>
     </div>
 </section>
 <section data-markdown>
