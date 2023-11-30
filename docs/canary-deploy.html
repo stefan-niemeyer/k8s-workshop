@@ -24,7 +24,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`canary.internal`)
+    - match: Host(`canary.MEINE-VM.laserschwert.io`)
       kind: Rule
       services:
         - name: k8s-demo-vx-svc
@@ -44,7 +44,7 @@ spec:
         </code></pre>
     </div>
     <div class="fragment" style="font-size: 2rem">
-        <p>Im Browser mehrmals aufrufen
+        <p>Im Browser mehrmals aufrufen<br>
             <a href="http://canary.MEINE-VM.laserschwert.io/" target="_blank">http://canary.MEINE-VM.laserschwert.io/</a>
         </p>
     </div>

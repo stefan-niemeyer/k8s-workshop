@@ -13,7 +13,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: vx.internal
+    - host: vx.MEINE-VM.laserschwert.io
       http:
         paths:
           - backend:
@@ -37,20 +37,20 @@ spec:
     <div class="fragment">
         <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
             # Aufruf der Anwendung von außerhalb über den Hostnamen vx.internal
-            $ curl -w " -&gt; %{response_code}\n" http://vx.internal/state
-        </code></pre>
-    </div>
-    <div class="fragment">
-        <p>/etc/hosts erweitern</p>
-        <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-            $ sudo nano /etc/hosts
-        </code></pre>
-        <pre data-id="code-animation"><code style="font-size:1rem;" class="language-plaintext" data-trim>
-            127.0.0.1 vx.internal blue-green.internal canary.internal
+            $ curl -w " -&gt; %{response_code}\n" http://vx.$(hostname).laserschwert.io/state
         </code></pre>
     </div>
     <div class="fragment" style="font-size: 2rem">
+        <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+            # Aufruf der Anwendung von außerhalb über den Hostnamen
+            # EXTERNAL_DNS=$(hostname).laserschwert.io
+            $ curl -w " -&gt; %{response_code}\n" http://vx.${EXTERNAL_DNS}/state
+        </code></pre>
         <p>Im Browser aufrufen
+        <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+            $ echo http://vx.${EXTERNAL_DNS}
+            http://vx.lab-1.laserschwert.io
+        </code></pre>
             <a href="http://vx.MEINE-VM.laserschwert.io" target="_blank">http://vx.MEINE-VM.laserschwert.io</a>
         </p>
     </div>

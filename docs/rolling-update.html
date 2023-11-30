@@ -67,7 +67,7 @@
     </div>
     <div class="fragment">
 		<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-			$ kubectl get pods -o wide
+			$ k get pods -o wide
 			NAME                           READY   STATUS    RESTARTS   AGE   IP
 			k8s-demo-vx-84454c4c9d-2q8bh   1/1     Running   0          17m   10.42.0.56
 			k8s-demo-vx-84454c4c9d-559b8   1/1     Running   0          87s   10.42.0.57
@@ -93,7 +93,7 @@
 			./get-loop.sh
 
 			# In anderem Tab Pods löschen
-			$ curl -w " -&gt; %{response_code}\n" http://vx.internal/error
+			$ curl -w " -&gt; %{response_code}\n" http://vx.${EXTERNAL_DNS}/error
 		</code></pre>
     </div>
 </section>
