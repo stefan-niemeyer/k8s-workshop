@@ -1,0 +1,36 @@
+<section id="bonustasks">
+    <h1>Bonusaufgaben</h1>
+</section>
+<section id="bonus-pods">
+    <h2>Pods</h2>
+    <ul>
+        <li>Starte einen Hilfscontainer auf Basis des Images "<b>wbitt/network-multitool</b>".<br>
+            Tipp: Siehe <a href="https://hub.docker.com" target="_blank">https://hub.docker.com</a>
+        </li>
+        <li>Versuche den "<b>curl</b>" auf den Demo-Container vom multitool-Container aus. (Hostname = Pod-Name)</li>
+        <li>Endpoints des Demo-Containers anschauen im Repo und weitere ausprobieren</li>
+    </ul>
+</section>
+<section id="bonus-deployment">
+    <h2>Deployment</h2>
+    <ul>
+        <li>Benutze das Image mit dem Tag "<b>experimental</b>" und beobachte den Pod mit <b>curl</b> vom ktools-Container aus</li>
+        <li>Was passiert, wenn man die Liveness-Probe entfernt?</li>
+        <li>Führe einen RollBack des Deployments auf eine Vorgängerversion durch. Tipp "<b>kubectl help</b>"</li>
+        <li>Experimentiere mit den <b>/ready</b> und <b>/health</b> Endpoints</li>
+    </ul>
+</section>
+<section id="bonus-service">
+    <h2>Service</h2>
+    <ul>
+        <li>Skaliere das Deployment so, dass 3 Replicas erzeugt werden.
+            Was ändert sich in der curl-Ausgabe mit dem kontinuierlichen <b>curl</b>?</li>
+        <li>Starte von Hand einen Pod. Der Service soll diesen berücksichtigen.</li>
+    </ul>
+</section>
+<section id="bonus-blue-green">
+    <h2>Blue-Green über Service</h2>
+    <ul>
+        <li>Stelle von blue auf green um über den Service, nicht den Ingress.</li>
+    </ul>
+</section>

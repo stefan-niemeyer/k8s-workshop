@@ -112,18 +112,17 @@ spec:
             # Mit Strg-C beenden
         </code></pre>
     </div>
-    <div class="fragment">
-        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-plaintext" data-trim>
-            # Name des Pods in Umgebungsvariable speichern
-            $ export POD_NAME=$(kubectl get pods \
-                                  -l app=k8s-demo-vx \
-                                  -o jsonpath='{.items[*].metadata.name}')
-        </code></pre>
-        <aside class="notes">Parameter -l oder --selector erläutern</aside>
-    </div>
 </section>
 <section>
     <h2>Arbeiten mit dem Pod</h2>
+    <p style="font-size: 1.5rem"><a href="https://stefan-niemeyer.github.io/k8s-workshop#/bonus-deployment" target="_blank">Bonusaufgaben Deployment</a></p>
+    <div>
+        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+            # Name des Pods mittels Umgebungsvariable POD_NAME merken
+            $ setpod
+        </code></pre>
+        <aside class="notes">Parameter -l oder --selector erläutern</aside>
+    </div>
     <div class="fragment">
         <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
             # Befehl im Pod ausführen
@@ -163,8 +162,8 @@ spec:
     <div class="fragment">
         <pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
             # In anderem Tab
-            $ export POD_NAME="$(kubectl get pods -l app=k8s-demo-vx -o jsonpath='{.items[*].metadata.name}')"
-            $ k exec -it $POD_NAME -- curl -w " -> %{response_code}\n" http://localhost:3000/error
+            $ setpod
+            $ k exec -it $POD_NAME -- curl -w " -> %{response_code}\n" http://localhost:3000/crash
         </code></pre>
     </div>
     <div class="fragment">
@@ -190,7 +189,7 @@ spec:
     <ul>
         <li>Der Pod ist von außen noch nicht verfügbar</li>
         <li>Der Name des Pods ist nicht stabil<br>
-            <span style="font-size: 1.7rem">Wenn der Pod gelöscht wird, bekommt der Neue einen anderen Namen</span>
+            <span style="font-size: 1.7rem">Wenn der Pod gelöscht wird, bekommt der neue einen anderen Namen</span>
         </li>
     </ul>
 </section>

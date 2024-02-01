@@ -52,15 +52,16 @@ spec:
             NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
             k8s-demo-vx-svc   ClusterIP   10.43.156.185   &lt;none&gt;        80/TCP    46s
         </code></pre>
-        <aside class="notes">Es ist nur eine Cluster IP vergeben, keine External IP</aside>
+        <aside class="notes">Es ist nur eine Cluster-IP vergeben, keine External-IP</aside>
     </div>
 </section>
 <section>
     <h2>Service benutzen</h2>
+    <p style="font-size: 1.5rem"><a href="https://stefan-niemeyer.github.io/k8s-workshop#/bonus-service" target="_blank">Bonusaufgaben Service</a></p>
     <div class="fragment">
         <pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
-            # Alias für Hilfspod erzeugen
-            $ alias ktools='kubectl run tools --rm -it --image wbitt/network-multitool -- /bin/bash'
+            # Alias für Hilfspod benutzen (ist über .profile definiert)
+            # alias ktools='kubectl run tools --rm -it --image wbitt/network-multitool -- /bin/bash'
             $ ktools
         </code></pre>
     </div>
@@ -68,12 +69,14 @@ spec:
         <pre data-id="code-animation"><code style="font-size:0.8rem;" class="language-console" data-trim>
             # Anwendung innerhalb des Clusters über Service aufrufen
             $ curl -w " -&gt; %{response_code}\n" http://k8s-demo-vx-svc/state
+
+            # oder kontinuierlicher curl
             $ for i in {1..120}; do curl -w " -&gt; %{response_code}\n" http://k8s-demo-vx-svc/state; sleep 1; done
         </code></pre>
     </div>
     <div class="fragment">
         <pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
-            # Pod von anderem Tab aus löschen
+            # Pod von anderem Tab aus löschen (oder tmux Strg-b ")
             $ k delete pod -l app=k8s-demo-vx
         </code></pre>
     </div>
@@ -86,4 +89,63 @@ spec:
             # "host" ändert sich und "totalRequests" beginnt bei 1
         </code></pre>
     </div>
+</section>
+<section>
+    <h2>Skalieren</h2>
+    <div class="fragment">
+		<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+			$ k get replicaset
+			NAME                       DESIRED   CURRENT   READY   AGE
+			k8s-demo-vx-57b5dcd478     1         1         1       1h
+		</code></pre>
+    </div>
+    <div class="fragment">
+		<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+			$ k scale deployments/k8s-demo-vx --replicas=3
+		</code></pre>
+    </div>
+    <div class="fragment">
+		<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+			$ k get pods -o wide
+			NAME                           READY   STATUS    RESTARTS   AGE   IP
+			k8s-demo-vx-84454c4c9d-2q8bh   1/1     Running   0          17m   10.42.0.56
+			k8s-demo-vx-84454c4c9d-559b8   1/1     Running   0          87s   10.42.0.57
+			k8s-demo-vx-84454c4c9d-94lb8   1/1     Running   0          87s   10.42.0.58
+
+			# Die Pods haben eigene IP-Adressen im Cluster
+		</code></pre>
+    </div>
+    <div class="fragment">
+		<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+			$ k get rs
+			NAME                     DESIRED   CURRENT   READY   AGE
+			k8s-demo-vx-57b5dcd478   3         3         3       1h
+		</code></pre>
+    </div>
+</section>
+<section>
+    <h2>Ausfallsicherheit testen</h2>
+    <div>
+		<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
+			# Anwendung mittels Schleife aufrufen
+			./get-loop.sh
+
+			# In anderem Tab Pods löschen
+			$ curl -w " -&gt; %{response_code}\n" http://vx.${EXTERNAL_DNS}/crash
+		</code></pre>
+    </div>
+</section>
+<section data-markdown>
+    <script type="text/template">
+        ## Gelöst
+        - Höhere Verfügbarkeit durch mehrere Pods und automatische Restarts <!-- .element: class="fragment" -->
+        - Anwendung ist im CLuster über festen Namen erreichbar<!-- .element: class="fragment" -->
+        - Service übernimmt Load-Balancing<!-- .element: class="fragment" -->
+    </script>
+</section>
+<section data-markdown>
+    <script type="text/template">
+        ## Offene Probleme
+        - App noch nicht von außerhalb des Clusters erreichbar
+    </script>
 </section>

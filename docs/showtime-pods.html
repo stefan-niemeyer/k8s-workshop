@@ -13,6 +13,7 @@
 </section>
 <section>
     <h2>Pod Starten</h2>
+    <p style="font-size: 1.5rem"><a href="https://stefan-niemeyer.github.io/k8s-workshop#/bonus-pods" target="_blank">Bonusaufgaben Pods</a></p>
     <pre data-id="code-animation"><code class="language-console" data-trim>
 		# Anwendung starten
 		$ k run demo --restart=Never \
@@ -36,11 +37,11 @@
     <div class="r-stack">
 		<pre class="fragment" style="font-size:1.4rem;" data-id="code-animation"><code class="language-console" data-trim>
 			# Anwendung abstürzen lassen
-			$ curl -w " -> %{response_code}\n" http://localhost:3000/error
+			$ curl -w " -> %{response_code}\n" http://localhost:3000/crash
 		</code><br><br></pre>
         <pre class="fragment" style="font-size:1.4rem;" data-id="code-animation"><code class="language-console" data-trim>
 			# Anwendung abstürzen lassen
-			$ curl -w " -> %{response_code}\n" http://localhost:3000/error
+			$ curl -w " -> %{response_code}\n" http://localhost:3000/crash
 			{"status":"Unexpected Error Occurred"} -> 500
 			demo:/app$ command terminated with exit code 137
 		</code></pre>
