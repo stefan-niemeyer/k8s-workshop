@@ -3,12 +3,18 @@
 </section>
 <section>
     <h2>Namespace anlegen</h2>
+    <p style="font-size: 1.5rem">Beim Workshop haben alle einen eigenen Namespace<br>
+        und dieser ist als der aktuelle Context eingetragen
+    </p>
     <pre data-id="code-animation"><code class="language-console" data-trim>
-		# Namespace anlegen
-		$ kubectl create namespace workshop
+    # Namespace anlegen (im Workshop nicht notwendig)
+    $ kubectl create namespace
 
-		# Namespace als Standard setzen
-		$ k config set-context --current --namespace=workshop
+    # Namespace als Standard setzen (im Workshop nicht notwendig)
+    $ k config set-context --current --namespace=workshop
+
+    # Aktuellen Namespace anzeigen
+    $ k config view --minify --output 'jsonpath={..namespace}'
 	</code></pre>
 </section>
 <section>

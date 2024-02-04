@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-DOMAIN=$(hostname).laserschwert.io
+DOMAIN="${EXTERNAL_DNS}"
 DOMAIN=${1:-$DOMAIN}
 
 echo "Use domain '$DOMAIN'"
