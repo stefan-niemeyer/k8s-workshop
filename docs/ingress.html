@@ -36,13 +36,13 @@ spec:
     <div class="fragment">
         <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
             # Aufruf der Anwendung von außerhalb über den Hostnamen vx.internal
-            $ curl -w " -&gt; %{response_code}\n" http://vx.$(hostname).laserschwert.io/state
+            $ curl -w " -&gt; %{response_code}\n" http://vx.${EXTERNAL_DNS}/state
         </code></pre>
     </div>
     <div class="fragment" style="font-size: 2rem">
         <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
             # Aufruf der Anwendung von außerhalb über den Hostnamen
-            # EXTERNAL_DNS=$(hostname).laserschwert.io
+            # EXTERNAL_DNS=MEIN-USER.laserschwert.io
             $ curl -w " -&gt; %{response_code}\n" http://vx.${EXTERNAL_DNS}/state
         </code></pre>
         <p>Im Browser aufrufen</p>
