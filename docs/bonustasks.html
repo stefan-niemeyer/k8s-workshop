@@ -15,15 +15,15 @@
     <h2>Deployment</h2>
     <ul>
         <li>Benutze das Image mit dem Tag "<b>experimental</b>" und beobachte den Pod mit <b>curl</b> vom ktools-Container aus</li>
-        <li>Was passiert, wenn man die Liveness-Probe entfernt?</li>
+        <li>Was passiert, wenn man die Liveness-Probe entfernt? (nicht vergessen, die liveness-Probe danach wieder zu aktiveren)</li>
         <li>Führe einen RollBack des Deployments auf eine Vorgängerversion durch. Tipp "<b>kubectl help</b>"</li>
-        <li>Experimentiere mit den <b>/ready</b> und <b>/health</b> Endpoints</li>
+        <li>Experimentiere mit den <b>/health</b> Endpoints</li>
     </ul>
 </section>
 <section id="bonus-service">
     <h2>Service</h2>
     <ul>
-        <li>Skaliere das Deployment so, dass 3 Replicas erzeugt werden.
+        <li>Experimentiere mit dem <b>/ready</b> Endpoint (vgl readyness-Probe)
             Was ändert sich in der curl-Ausgabe mit dem kontinuierlichen <b>curl</b>?</li>
         <li>Starte von Hand einen Pod. Der Service soll diesen berücksichtigen.</li>
     </ul>
@@ -32,5 +32,6 @@
     <h2>Blue-Green über Service</h2>
     <ul>
         <li>Stelle von blue auf green um über den Service, nicht den Ingress.</li>
+        <li>Welche Vor-/Nachteile gibt es bei den Varianten (Weiche in Service bzw Ingress)</li>
     </ul>
 </section>

@@ -103,8 +103,17 @@
 						condition: function () {
 							return !!document.querySelector('[data-external],[data-external-replace]');
 						}
+					},
+					{
+						src: 'plugin/svg-fragment/reveal-svg-fragment.js',
+						condition: function(){
+							return true;
+						}
 					}
 				],
+				svgFragment: {
+					selector: "data-selector"
+				},
 
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealChalkboard, RevealCustomControls, RevealMarkdown, RevealHighlight, RevealNotes, RevealMenu ],
