@@ -104,7 +104,7 @@
            x="157.44931"
            y="543.29736" /><text
            xml:space="preserve"
-           style="fill:#000000;stroke-width:0.935"
+           style="fill:#000000;stroke-width:0.935;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:sans-serif;"
            x="162.35515"
            y="556.48755"
            id="text1"><tspan
@@ -334,7 +334,7 @@
            x="157.44931"
            y="543.29736" /><text
            xml:space="preserve"
-           style="fill:#000000;stroke-width:0.935"
+           style="fill:#000000;stroke-width:0.935;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:sans-serif;"
            x="162.35515"
            y="556.48755"
            id="text12"><tspan
@@ -421,7 +421,7 @@
            x="157.44931"
            y="543.29736" /><text
            xml:space="preserve"
-           style="fill:#000000;stroke-width:0.935"
+           style="fill:#000000;stroke-width:0.935;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:sans-serif;"
            x="162.35515"
            y="556.48755"
            id="text38"><tspan
@@ -651,7 +651,7 @@
        inkscape:label="title"
        style="display:inline"
        transform="translate(0,102)"><rect
-         style="fill:#191919;fill-opacity:1;stroke:#000000;stroke-width:0.966271;stroke-opacity:1"
+         style="fill:#191919;fill-opacity:1;stroke:none;stroke-width:0.966271;stroke-opacity:1"
          id="rect53"
          width="378.36545"
          height="35.51284"
@@ -722,7 +722,7 @@
              x="162.35515"
              y="556.48755">2x v2</tspan></text></g></g><g
        id="g42"
-       transform="translate(92.562798,-9.468128)"
+       transform="translate(94.562798,-9.468128)"
        inkscape:label="rs1-v1"
        style="display:inline"><rect
          style="fill:#e8dad5;fill-opacity:1;stroke:#ff0000;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
@@ -769,7 +769,7 @@
        inkscape:label="title"
        style="display:inline"
        transform="translate(0,102)"><rect
-         style="fill:#191919;fill-opacity:1;stroke:#000000;stroke-width:0.979225;stroke-opacity:1"
+         style="fill:#191919;fill-opacity:1;stroke:none;stroke-width:0.979225;stroke-opacity:1"
          id="rect55"
          width="388.71954"
          height="35.499889"
@@ -947,7 +947,7 @@
        inkscape:label="title"
        style="display:inline"
        transform="translate(0,102)"><rect
-         style="fill:#191919;fill-opacity:1;stroke:#000000;stroke-width:0.998327;stroke-opacity:1"
+         style="fill:#191919;fill-opacity:1;stroke:none;stroke-width:0.998327;stroke-opacity:1"
          id="rect56"
          width="404.25098"
          height="35.480785"
@@ -963,7 +963,7 @@
            x="58.499687"
            y="242.14429">Deployment Upgrade: pods are created / terminated</tspan></text></g><g
        id="g64"
-       transform="translate(92.562798,-9.46813)"
+       transform="translate(94.562798,-9.46813)"
        inkscape:label="rs1-v1"
        style="display:inline"><rect
          style="fill:#e8dad5;fill-opacity:1;stroke:#e8dad5;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
