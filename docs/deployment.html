@@ -7,6 +7,21 @@
     </script>
 </section>
 <section>
+    <h2>Deployment Graph</h2>
+    <div data-svg-fragment="assets/deployments_dark.svg">
+        <a class="show-svg" data-selector="[*|label=base]"></a>
+        <a class="hide-svg" data-selector="[*|label=service1]"></a>
+        <a class="hide-svg" data-selector="[*|label=service2]"></a>
+        <a class="hide-svg" data-selector="[*|label=upgrade1]"></a>
+        <a class="hide-svg" data-selector="[*|label=upgrade2]"></a>
+        <a class="hide-svg" data-selector="[*|label=upgrade3]"></a>
+        <a class="hide-svg" data-selector="[*|label=ingress]"></a>
+        <a class="fragment" data-selector="[*|label=deployment1]"></a>
+        <a class="fragment" data-selector="[*|label=deployment2]"></a>
+        <a class="fragment" data-selector="[*|label=deployment3]"></a>
+    </div>
+</section>
+<section>
     <h2>kubectl</h2>
     <p>Zugriff auf den Cluster per CLI</p>
     <p><q>The canonical pronunciation of kubectl<br>is "cube control"</q></p>
