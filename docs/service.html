@@ -140,10 +140,13 @@ spec:
     <div>
 		<pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
 			# Anwendung mittels Schleife aufrufen
-			./get-loop.sh
+			$ kubectl run loop --rm -it --image wbitt/network-multitool -- \
+                  bash -c 'while true; do curl -w " -> %{response_code}\n" \
+                           http://k8s-demo-vx-svc/state; sleep 1; done'
 
-			# In anderem Tab Pods löschen
-			$ curl -w " -&gt; %{response_code}\n" http://vx.${EXTERNAL_DNS}/crash
+			# In anderem Tab Pods löschen (oder tmux Strg-b ")
+			$ kubectl exec -it loop -- \
+                  bash -c 'curl -w " -> %{response_code}\n" http://k8s-demo-vx-svc/crash'
 		</code></pre>
     </div>
 </section>
@@ -151,7 +154,7 @@ spec:
     <script type="text/template">
         ## Gelöst
         - Höhere Verfügbarkeit durch mehrere Pods und automatische Restarts <!-- .element: class="fragment" -->
-        - Anwendung ist im CLuster über festen Namen erreichbar<!-- .element: class="fragment" -->
+        - Anwendung ist im Cluster über festen Namen erreichbar<!-- .element: class="fragment" -->
         - Service übernimmt Load-Balancing<!-- .element: class="fragment" -->
     </script>
 </section>
