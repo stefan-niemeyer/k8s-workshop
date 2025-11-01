@@ -33,9 +33,6 @@ spec:
             - name: http-app
               containerPort: 8080
               protocol: TCP
-          volumeMounts:
-            - name: npm-logs
-              mountPath: /home/node/.npm
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -53,7 +50,7 @@ spec:
               port: http-app
               scheme: HTTP
             periodSeconds: 10
-            initialDelaySeconds: 5
+            initialDelaySeconds: 2
             successThreshold: 1
             timeoutSeconds: 3
           resources:
@@ -70,6 +67,3 @@ spec:
             runAsNonRoot: true
       enableServiceLinks: false
       automountServiceAccountToken: false
-      volumes:
-        - name: npm-logs
-          emptyDir: {}
