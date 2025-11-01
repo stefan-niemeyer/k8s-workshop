@@ -12,7 +12,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: vx.MEINE-VM.laserschwert.io
+    - host: vx.MEINE-VM.nerdapp.work
       http:
         paths:
           - backend:
@@ -57,15 +57,15 @@ spec:
     <div class="fragment" style="font-size: 2rem">
         <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
             # Aufruf der Anwendung von außerhalb über den Hostnamen
-            # EXTERNAL_DNS=MEIN-USER.laserschwert.io
+            # EXTERNAL_DNS=MEIN-USER.nerdapp.work
             $ curl -w " -&gt; %{response_code}\n" http://vx.${EXTERNAL_DNS}/state
         </code></pre>
         <p>Im Browser aufrufen</p>
         <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
             $ echo http://vx.${EXTERNAL_DNS}
-            http://vx.lab-1.laserschwert.io
+            http://vx.lab-1.nerdapp.work
         </code></pre>
-        <a href="http://vx.MEINE-VM.laserschwert.io" target="_blank">http://vx.MEINE-VM.laserschwert.io</a>
+        <a href="http://vx.MEINE-VM.nerdapp.work" target="_blank">http://vx.MEINE-VM.nerdapp.work</a>
     </div>
 </section>
 <section>

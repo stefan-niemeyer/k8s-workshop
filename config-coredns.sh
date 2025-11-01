@@ -18,11 +18,11 @@ data:
         ${INGRESS_HOST} internal
       }
     }
-  laserschwert.server: |
-    laserschwert.io:53 {
-      rewrite name regex .*\.laserschwert\.io laserschwert.io
+  nerdapp.server: |
+    nerdapp.work:53 {
+      rewrite name regex .*\.nerdapp\.work nerdapp.work
       hosts {
-        ${INGRESS_HOST} laserschwert.io
+        ${INGRESS_HOST} nerdapp.work
       }
     }
 EOF

@@ -24,9 +24,9 @@
     <pre data-id="code-animation"><code class="language-console" data-trim>
 		# Anwendung starten
 		$ k run demo --restart=Never \
-				--image ghcr.io/stefan-niemeyer/k8s-demo/k8s-demo:v1
+				--image ghcr.io/stefan-niemeyer/k8s-demo-go/k8s-demo-go:v1
 	</code></pre>
-    <p style="font-size: 1.5rem">Repo unter <a href="https://github.com/stefan-niemeyer/k8s-demo" target="_blank">https://github.com/stefan-niemeyer/k8s-demo</a></p>
+    <p style="font-size: 1.5rem">Repo unter <a href="https://github.com/stefan-niemeyer/k8s-demo-go" target="_blank">https://github.com/stefan-niemeyer/k8s-demo-go</a></p>
     <div class="fragment">
 		<pre data-id="code-animation"><code class="language-console" data-trim>
 			# Logs anschauen
@@ -38,17 +38,17 @@
 			# Shell im Pod ausführen
 			$ k exec -it demo -- bash
 			# Anwendung aufrufen
-			$ curl -w " -> %{response_code}\n" http://localhost:3000/state
+			$ curl -w " -> %{response_code}\n" http://localhost:8080/state
 		</code></pre>
     </div>
     <div class="r-stack">
 		<pre class="fragment" style="font-size:1.4rem;" data-id="code-animation"><code class="language-console" data-trim>
 			# Anwendung abstürzen lassen
-			$ curl -w " -> %{response_code}\n" http://localhost:3000/crash
+			$ curl -w " -> %{response_code}\n" http://localhost:8080/crash
 		</code><br><br></pre>
         <pre class="fragment" style="font-size:1.4rem;" data-id="code-animation"><code class="language-console" data-trim>
 			# Anwendung abstürzen lassen
-			$ curl -w " -> %{response_code}\n" http://localhost:3000/crash
+			$ curl -w " -> %{response_code}\n" http://localhost:8080/crash
 			{"status":"Unexpected Error Occurred"} -> 500
 			demo:/app$ command terminated with exit code 137
 		</code></pre>

@@ -59,11 +59,11 @@ spec:
     spec:
       containers:
         - name: backend
-          image: ghcr.io/stefan-niemeyer/k8s-demo/k8s-demo:v1
+          image: ghcr.io/stefan-niemeyer/k8s-demo-go/k8s-demo-go:v1
           imagePullPolicy: IfNotPresent
           ports:
             - name: http-app
-              containerPort: 3000
+              containerPort: 8080
               protocol: TCP
           volumeMounts:
             - name: npm-logs
@@ -155,7 +155,7 @@ spec:
             # Im Pod (Der Prompt sieht anders aus)
             $ ps
             $ cat src/server.js
-            $ curl -w " -> %{response_code}\n" http://localhost:3000/state
+            $ curl -w " -> %{response_code}\n" http://localhost:8080/state
         </code></pre>
     </div>
     <div class="fragment">
@@ -178,7 +178,7 @@ spec:
         <pre data-id="code-animation"><code style="font-size:0.9rem;" class="language-console" data-trim>
             # In anderem Tab
             $ setpod
-            $ k exec -it $POD_NAME -- curl -w " -> %{response_code}\n" http://localhost:3000/crash
+            $ k exec -it $POD_NAME -- curl -w " -> %{response_code}\n" http://localhost:8080/crash
         </code></pre>
     </div>
     <div class="fragment">
