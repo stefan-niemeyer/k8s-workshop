@@ -1,11 +1,11 @@
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
+  name: k8s-demo-canary-ingressroute
   labels:
     app: k8s-demo-canary
-    app.kubernetes.io/name: k8s-demo-canary-ingress-route
+    app.kubernetes.io/name: k8s-demo-canary-ingressroute
     app.kubernetes.io/component: server
-  name: k8s-demo-canary-ingress-route
 spec:
   entryPoints:
     - web

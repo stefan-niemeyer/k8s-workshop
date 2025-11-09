@@ -10,37 +10,43 @@
     </div>
 </section>
 <section>
-    <h2>IngressRoute Manifest</h2>
-    <pre data-id="code-animation"><code data-line-numbers="2,8|13|16-18|19-21" class="language-yaml" data-trim>
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
+    <h2>HTTPRoute Manifest</h2>
+    <pre data-id="code-animation"><code data-line-numbers="2,4|15|22-24|25-27" class="language-yaml" data-trim>
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
 metadata:
+  name: k8s-demo-canary-httproute
   labels:
     app: k8s-demo-canary
-    app.kubernetes.io/name: k8s-demo-canary-ingress-route
+    app.kubernetes.io/name: k8s-demo-canary-httproute
     app.kubernetes.io/component: server
-  name: k8s-demo-canary-ingress-route
 spec:
-  entryPoints:
-    - web
-  routes:
-    - match: Host(`canary.MEINE-VM.nerdapp.work`)
-      kind: Rule
-      services:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+      sectionName: web
+  hostnames:
+    - canary.MEINE-VM.nerdapp.work
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
         - name: k8s-demo-vx-svc
-          port: http
+          port: 80
           weight: 80  # 80% der Anfragen an k8s-demo-vx-svc
         - name: k8s-demo-canary-svc
-          port: http
+          port: 80
           weight: 20  # 20% der Anfragen an k8s-demo-canary-svc
     </code></pre>
 </section>
 <section>
-    <h2>IngresRoute ausrollen</h2>
+    <h2>HTTPRoute ausrollen</h2>
     <div>
         <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-            # IngressRoute anlegen mit Aufteilung zwischen Services 80/20
-            $ k apply -f k8s-demo-canary-ingress-route.yaml
+            # HTTPRoute anlegen mit Aufteilung zwischen Services 80/20
+            $ k apply -f k8s-demo-canary-httproute.yaml
         </code></pre>
     </div>
     <div class="fragment" style="font-size: 2rem">

@@ -1,32 +1,51 @@
 <section id="ingress">
-    <h1>Ingress Manifest</h1>
-    <pre class="fragment" data-id="code-animation"><code data-line-numbers="2,8|10|12|16-19" class="language-yaml" data-trim>
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  labels:
-    app: k8s-demo-vx
-    app.kubernetes.io/name: k8s-demo-vx-ingress
-    app.kubernetes.io/component: server
-  name: k8s-demo-vx-ingress
-spec:
-  ingressClassName: traefik
-  rules:
-    - host: vx.MEINE-VM.nerdapp.work
-      http:
-        paths:
-          - backend:
-              service:
-                name: k8s-demo-vx-svc
-                port:
-                  name: http
-            path: /
-            pathType: Prefix
-    </code></pre>
-    <aside class="notes">Andere Ingress Controller: nginx, HA Proxy</aside>
+    <h1>Gateway API</h1>
+    <ul>
+        <li>Steuert Netzwerkverkehr in einem K8s-Cluster</li>
+        <li>löst viele Einschränkungen des Ingress-Controllers</li>
+        <li>ermöglicht Rollen- und Team-getrennte Konfigs</li>
+        <li>Modularer Aufbau
+            <ul>
+                <li>Gateway (Load Balancer)</li>
+                <li>GatewayClass (Template)</li>
+                <li>HTTPRoute/GRPCRoute/TCPRoute etc.<br>(Routing-Regeln)</li>
+            </ul>
+        </li>
+    </ul>
+    <aside class="notes">modern und standardisiert.</aside>
 </section>
 <section>
-    <h2>Ingress</h2>
+    <h2>HTTPRoute Manifest</h2>
+    <pre class="fragment" data-id="code-animation"><code data-line-numbers="2,4|10-13|15|21-24" class="language-yaml" data-trim>
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: k8s-demo-vx-httproute
+  labels:
+    app: k8s-demo-vx
+    app.kubernetes.io/name: k8s-demo-vx-route
+    app.kubernetes.io/component: server
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+      sectionName: web
+  hostnames:
+    - vx.MEINE-VM.nerdapp.work
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: k8s-demo-vx-svc
+          namespace: MEIN-NAMESPACE
+          port: 80
+    </code></pre>
+    <aside class="notes">Andere Gateway Controller: Nginx, HA Proxy</aside>
+</section>
+<section>
+    <h2>Gateway</h2>
     <div data-svg-fragment="assets/deployments_dark.svg">
         <a class="show-svg" data-selector="[*|label=base]"></a>
         <a class="show-svg" data-selector="[*|label=service1]"></a>
@@ -34,19 +53,19 @@ spec:
         <a class="hide-svg" data-selector="[*|label=upgrade1]"></a>
         <a class="hide-svg" data-selector="[*|label=upgrade2]"></a>
         <a class="hide-svg" data-selector="[*|label=upgrade3]"></a>
-        <a class="hide-svg" data-selector="[*|label=gateway]"></a>
+        <a class="hide-svg" data-selector="[*|label=ingress]"></a>
         <a class="show-svg" data-selector="[*|label=deployment1]"></a>
         <a class="show-svg" data-selector="[*|label=deployment2]"></a>
         <a class="show-svg" data-selector="[*|label=deployment3]"></a>
-        <a class="fragment" data-selector="[*|label=ingress]"></a>
+        <a class="fragment" data-selector="[*|label=gateway]"></a>
     </div>
 </section>
 <section>
-    <h2>Ingress benutzen</h2>
+    <h2>HTTPRoute benutzen</h2>
     <div class="fragment">
         <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
-            # Ingress anlegen
-            $ k apply -f k8s-demo-vx-ingress.yaml
+            # HTTPRoute anlegen
+            $ k apply -f k8s-demo-vx-httproute.yaml
         </code></pre>
     </div>
     <div class="fragment" style="font-size: 2rem">

@@ -1,11 +1,11 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  name: k8s-demo-vx-ingress
   labels:
     app: k8s-demo-vx
     app.kubernetes.io/name: k8s-demo-vx-ingress
     app.kubernetes.io/component: server
-  name: k8s-demo-vx-ingress
 spec:
   ingressClassName: traefik
   rules:
