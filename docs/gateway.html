@@ -16,7 +16,7 @@
 </section>
 <section>
     <h2>HTTPRoute Manifest</h2>
-    <pre class="fragment" data-id="code-animation"><code data-line-numbers="2,4|10-13|15|21-24" class="language-yaml" data-trim>
+    <pre class="fragment" data-id="code-animation"><code data-line-numbers="2,4|10-13|15|21-23" class="language-yaml" data-trim>
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
@@ -39,7 +39,6 @@ spec:
             value: /
       backendRefs:
         - name: k8s-demo-vx-svc
-          namespace: MEIN-NAMESPACE
           port: 80
     </code></pre>
     <aside class="notes">Andere Gateway Controller: Nginx, HA Proxy</aside>
@@ -49,7 +48,7 @@ spec:
     <div data-svg-fragment="assets/deployments_dark.svg">
         <a class="show-svg" data-selector="[*|label=base]"></a>
         <a class="show-svg" data-selector="[*|label=service1]"></a>
-        <a class="show-svg" data-selector="[*|label=service2]"></a>
+        <a class="hide-svg" data-selector="[*|label=service2]"></a>
         <a class="hide-svg" data-selector="[*|label=upgrade1]"></a>
         <a class="hide-svg" data-selector="[*|label=upgrade2]"></a>
         <a class="hide-svg" data-selector="[*|label=upgrade3]"></a>
