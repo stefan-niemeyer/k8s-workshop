@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: vx.DOMAIN_PLACEHOLDER
+    - host: vx-DOMAIN_PLACEHOLDER
       http:
         paths:
           - backend:

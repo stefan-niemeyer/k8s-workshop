@@ -10,7 +10,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`canary.DOMAIN_PLACEHOLDER`)
+    - match: Host(`canary-DOMAIN_PLACEHOLDER`)
       kind: Rule
       services:
         - name: k8s-demo-vx-svc

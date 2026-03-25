@@ -1,10 +1,10 @@
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
-  name: k8s-demo-vx-httproute
+  name: k8s-demo-blue-green-httproute
   labels:
-    app: k8s-demo-vx
-    app.kubernetes.io/name: k8s-demo-vx-httproute
+    app: k8s-demo-blue-green
+    app.kubernetes.io/name: k8s-demo-blue-green-httproute
     app.kubernetes.io/component: server
 spec:
   parentRefs:
@@ -15,12 +15,12 @@ spec:
       namespace: nerdapp-work
       sectionName: websecure
   hostnames:
-    - vx-DOMAIN_PLACEHOLDER
+    - blue-green-DOMAIN_PLACEHOLDER
   rules:
     - matches:
         - path:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: k8s-demo-vx-svc
+        - name: k8s-demo-green-svc
           port: 80

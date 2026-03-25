@@ -12,7 +12,7 @@ spec:
       namespace: traefik
       sectionName: web
   hostnames:
-    - canary.DOMAIN_PLACEHOLDER
+    - canary-DOMAIN_PLACEHOLDER
   rules:
     - matches:
         - path:
