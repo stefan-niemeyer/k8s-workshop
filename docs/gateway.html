@@ -16,7 +16,7 @@
 </section>
 <section>
     <h2>HTTPRoute Manifest</h2>
-    <pre class="fragment" data-id="code-animation"><code data-line-numbers="2,4|10-13|15|21-23" class="language-yaml" data-trim>
+    <pre class="fragment" data-id="code-animation"><code data-line-numbers="2,4|10-16|18|24-27" class="language-yaml" data-trim>
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
@@ -27,9 +27,12 @@ metadata:
     app.kubernetes.io/component: server
 spec:
   parentRefs:
-    - name: traefik-gateway
-      namespace: traefik
+    - name: nerdapp-work-gateway
+      namespace: nerdapp-work
       sectionName: web
+    - name: nerdapp-work-gateway
+      namespace: nerdapp-work
+      sectionName: websecure
   hostnames:
     - vx-MEINE-VM.nerdapp.work
   rules:

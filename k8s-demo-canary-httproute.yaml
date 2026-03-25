@@ -8,9 +8,12 @@ metadata:
     app.kubernetes.io/component: server
 spec:
   parentRefs:
-    - name: traefik-gateway
-      namespace: traefik
+    - name: nerdapp-work-gateway
+      namespace: nerdapp-work
       sectionName: web
+    - name: nerdapp-work-gateway
+      namespace: nerdapp-work
+      sectionName: websecure
   hostnames:
     - canary-DOMAIN_PLACEHOLDER
   rules:

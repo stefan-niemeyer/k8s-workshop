@@ -107,15 +107,10 @@ spec:
     <h2>Showtime Deployment</h2>
     <div class="fragment">
         <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-            # Deployment anlegen
-            $ k apply -f k8s-demo-vx-deploy.yaml
+            # Deployment anlegen und anzeigen
+            $ kubectl apply -f k8s-demo-vx-deploy.yaml && \
+              kubectl get deployments -w
             deployment.apps/k8s-demo-vx created
-        </code></pre>
-    </div>
-    <div class="fragment">
-        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
-            # Deployment anzeigen
-            $ k get deployments -w
             NAME          READY   UP-TO-DATE   AVAILABLE   AGE
             k8s-demo-vx   0/1     1            0           17s
             k8s-demo-vx   1/1     1            1           21s
