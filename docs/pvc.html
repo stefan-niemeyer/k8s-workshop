@@ -1,0 +1,88 @@
+<section id="ingress">
+    <h1>PVC</h1>
+    <ul>
+        <li>Persistant Volume Claims sind zum permanenten Speichern von Daten gedacht<br>
+            bspw. für Datenbanken, Caches</li>
+    </ul>
+    <p>
+        Doku auf
+        <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims" target="_blank">kubernetes.io</a>
+    </p>
+    <aside class="notes"></aside>
+</section>
+<section>
+    <h2>PVC</h2>
+    <pre class="fragment" data-id="code-animation"><code data-line-numbers="2,4|11|9-10|12-14" class="language-yaml" data-trim>
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: demo-many-pvc
+  labels:
+    app: pvc-demo
+    app.kubernetes.io/name: demo-many-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 20Mi
+    </code></pre>
+    <aside class="notes"></aside>
+</section>
+<section>
+    <h2>Pods mit PVC</h2>
+    <pre class="fragment" data-id="code-animation"><code data-line-numbers="2,4|9|26-29|23-25|22" class="language-yaml" data-trim>
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pvc-demo-app
+  labels:
+    app: pvc-demo
+    app.kubernetes.io/name: pvc-demo-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pvc-demo
+  template:
+    metadata:
+      labels:
+        app: pvc-demo
+    spec:
+      containers:
+      - name: writer
+        image: busybox
+        # Dieser Befehl schreibt kontinuierlich in eine Datei den Pod-Namen
+        command: ["/bin/sh", "-c", "while true; do echo $(date) - $(hostname) >> /data/shared-log.txt; sleep 5; done"]
+        volumeMounts:
+        - name: shared-vol
+          mountPath: /data
+      volumes:
+      - name: shared-vol
+        persistentVolumeClaim:
+          claimName: demo-many-pvc
+    </code></pre>
+    <aside class="notes"></aside>
+</section>
+<section>
+    <h2>PVC benutzen</h2>
+    <div class="fragment">
+        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+            # PVC und Deployment anlegen
+            $ k apply -f pvc/demo-pvc.yaml
+            persistentvolumeclaim/demo-many-pvc created
+            deployment.apps/pvc-demo-app created
+        </code></pre>
+    </div>
+    <div class="fragment">
+        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+            $ pods=( $(kubectl get pods -o name -l app=pvc-demo) )
+            $ k exec ${pods[0]} -- tail -f /data/shared-log.txt
+            Wed May 6 13:12:18 UTC 2026 - pvc-demo-app-6bbcbdd6c6-dbwxb
+            Wed May 6 13:12:18 UTC 2026 - pvc-demo-app-6bbcbdd6c6-rvngf
+            Wed May 6 13:12:23 UTC 2026 - pvc-demo-app-6bbcbdd6c6-dbwxb
+        </code></pre>
+    </div>
+    <aside class="notes"></aside>
+</section>

@@ -1,0 +1,171 @@
+<section id="ingress">
+    <h1>ConfigMap</h1>
+    <ul>
+        <li>ConfigMap für nicht vertrauliche Daten</li>
+        <li>Werden als Key-Value-Paar abgelegt</li>
+        <li>Pods können Inhalt als Umgebungsvariablen oder Volume verwenden</li>
+    </ul>
+    <p>
+        Doku auf
+        <a href="https://kubernetes.io/docs/concepts/configuration/configmap/" target="_blank">kubernetes.io</a>
+        und
+        <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#configure-all-key-value-pairs-in-a-configmap-as-container-environment-variables" target="_blank">hier</a>
+    </p>
+    <aside class="notes">binaryData für Binärdaten. ConfigMap max. 1MiB groß</aside>
+</section>
+<section>
+    <h2>ConfigMap (property-like)</h2>
+    <pre class="fragment" data-id="code-animation"><code data-line-numbers="2,4|9-12" class="language-yaml" data-trim>
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config
+  labels:
+    app: configmap-demo
+    app.kubernetes.io/name: db-config
+data:
+  DB_SERVER: "orasrv.example.com"
+  # Value muss ein String sein, daher mit Anfuehrungszeichen
+  DB_PORT: "1234"
+  DB_URL: "jdbc:oracle:thin:@orasrv.example.com:1234/MY_DB"
+    </code></pre>
+    <aside class="notes"></aside>
+</section>
+<section>
+    <h2>ConfigMap (file-like)</h2>
+    <pre class="fragment" data-id="code-animation"><code data-line-numbers="2,4|13-21" class="language-yaml" data-trim>
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: game-demo
+  labels:
+    app: configmap-demo
+    app.kubernetes.io/name: game-demo
+data:
+  # property-like keys
+  player_initial_lives: "3"
+  ui_properties_file_name: "user-interface.properties"
+
+  # file-like keys
+  game.properties: |
+    enemy.types=aliens,monsters
+    player.maximum-lives=5
+
+  user-interface.properties: |
+    color.good=purple
+    color.bad=yellow
+    allow.textmode=true
+    </code></pre>
+    <aside class="notes"></aside>
+</section>
+<section>
+    <h2>Pod mit ConfigMap</h2>
+    <pre class="fragment" data-id="code-animation"><code data-line-numbers="2,4|13-15|16,19-29|38,49-51|30,34-37|38,40-48|30-33" class="language-yaml" data-trim>
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configmap-demo-pod
+  labels:
+    app: configmap-demo
+    app.kubernetes.io/name: configmap-demo-pod
+spec:
+  containers:
+    - name: demo
+      image: alpine
+      command: ["sleep", "3600"]
+      envFrom:
+        - configMapRef:
+            name: db-config
+      env:
+        - name: DIREKTER_WERT
+          value: "Hallo Leute"
+        - name: PLAYER_INITIAL_LIVES
+          # Beachte: Var-Name != Key in ConfigMap
+          valueFrom:
+            configMapKeyRef:
+              name: game-demo
+              key: player_initial_lives
+        - name: UI_PROPERTIES_FILE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: game-demo
+              key: ui_properties_file_name
+      volumeMounts:
+        - name: config
+          mountPath: "/meine-config-dateien"
+          readOnly: true
+        - name: config-einzeln
+          mountPath: "/etc/game.properties" # Dateiname
+          subPath: "game.properties"        # Key in ConfigMap
+          readOnly: true
+  volumes:
+    # Volumes werden auf Pod Ebene definiert und dann im Container gemountet
+    - name: config
+      configMap:
+        name: game-demo
+        # Liste mit Keys aus der ConfigMap die als Datei gemountet werden sollen
+        items:
+          - key: "game.properties"
+            path: "meine-game.properties"
+          - key: "user-interface.properties"
+            path: "meine-user-interface.properties"
+    - name: config-einzeln
+      configMap:
+        name: game-demo
+    </code></pre>
+    <aside class="notes"></aside>
+</section>
+<section>
+    <h2>ConfigMap benutzen</h2>
+    <div class="fragment">
+        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+            # ConfigMaps und Pod anlegen
+            $ k apply -f cm/db-demo-cm.yaml -f cm/game-demo-cm.yaml
+            $ k apply -f cm/configure-pod.yaml
+        </code></pre>
+    </div>
+    <div class="fragment">
+        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+            # Shell im Pod öffnen
+            $ k exec -it configmap-demo-pod -- sh
+        </code></pre>
+    </div>
+    <div class="fragment">
+        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+            / # env | sort
+            DB_PORT=1234
+            DB_SERVER=orasrv.example.com
+            DB_URL=jdbc:oracle:thin:@orasrv.example.com:1234/MY_DB
+            DIREKTER_WERT=Hallo Leute
+            PLAYER_INITIAL_LIVES=3
+            UI_PROPERTIES_FILE_NAME=user-interface.properties
+        </code></pre>
+    </div>
+</section>
+<section>
+    <h2>ConfigMap Volume-Mounts</h2>
+    <div class="fragment">
+        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+            / # ls -l /meine-config-dateien
+            total 0
+            lrwxrwxrwx ... meine-game.properties -> ..data/meine-game.properties
+            lrwxrwxrwx ... meine-user-interface.properties -> ..data/meine-user-interface.properties
+
+            / # cat /meine-config-dateien/meine-user-interface.properties
+            color.good=purple
+            color.bad=yellow
+            allow.textmode=true
+        </code></pre>
+    </div>
+    <div class="fragment">
+        <pre data-id="code-animation"><code style="font-size:1.4rem;" class="language-console" data-trim>
+            / # ls -l /etc/game.properties
+            -rw-r--r-- 1 root root 51 May 6 09:48 /etc/game.properties
+
+            / # cat /etc/game.properties
+            enemy.types=aliens,monsters
+            player.maximum-lives=5
+        </code></pre>
+    </div>
+    <aside class="notes">Unterschiedliche Zugriffsrechte 777 vs 644</aside>
+</section>

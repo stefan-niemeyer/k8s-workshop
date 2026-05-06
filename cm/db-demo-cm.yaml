@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config
+  labels:
+    app: configmap-demo
+    app.kubernetes.io/name: db-config
+data:
+  DB_SERVER: "orasrv.example.com"
+  # Value muss ein String sein, daher mit Anfuehrungszeichen
+  DB_PORT: "1234"
+  DB_URL: "jdbc:oracle:thin:@orasrv.example.com:1234/MY_DB"

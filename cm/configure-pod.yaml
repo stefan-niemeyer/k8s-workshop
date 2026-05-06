@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configmap-demo-pod
+  labels:
+    app: configmap-demo
+    app.kubernetes.io/name: configmap-demo-pod
+spec:
+  containers:
+    - name: demo
+      image: alpine
+      command: ["sleep", "3600"]
+      envFrom:
+        - configMapRef:
+            name: db-config
+      env:
+        - name: DIREKTER_WERT
+          value: "Hallo Leute"
+        - name: PLAYER_INITIAL_LIVES
+          # Beachte: Var-Name != Key in ConfigMap
+          valueFrom:
+            configMapKeyRef:
+              name: game-demo
+              key: player_initial_lives
+        - name: UI_PROPERTIES_FILE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: game-demo
+              key: ui_properties_file_name
+      volumeMounts:
+        - name: config
+          mountPath: "/meine-config-dateien"
+          readOnly: true
+        - name: config-einzeln
+          mountPath: "/etc/game.properties" # Dateiname
+          subPath: "game.properties"        # Key in ConfigMap
+          readOnly: true
+  volumes:
+    # Volumes werden auf Pod Ebene definiert und dann im Container gemountet
+    - name: config
+      configMap:
+        name: game-demo
+        # Liste mit Keys aus der ConfigMap die als Datei gemountet werden sollen
+        items:
+          - key: "game.properties"
+            path: "meine-game.properties"
+          - key: "user-interface.properties"
+            path: "meine-user-interface.properties"
+    - name: config-einzeln
+      configMap:
+        name: game-demo

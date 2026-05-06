@@ -4,7 +4,7 @@ DOMAIN="${EXTERNAL_DNS}"
 DOMAIN=${1:-$DOMAIN}
 
 echo "Use domain '${DOMAIN}'"
-for manifest in *.yaml; do
+for manifest in *.yaml blue-green/*.yaml canary/*.yaml; do
   # shellcheck disable=SC2086
-  sed -i 's/\DOMAIN_PLACEHOLDER/'${DOMAIN}'/g' "$manifest"
+  sed -i 's/\DOMAIN_PLACEHOLDER/'${DOMAIN}'/g' "${manifest}"
 done

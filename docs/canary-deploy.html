@@ -3,7 +3,7 @@
     <div>
         <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
             # Version 'canary' ausrollen
-            $ k apply -f k8s-demo-canary.yaml
+            $ k apply -f canary/k8s-demo-canary.yaml
             deployment.apps/k8s-demo-canary created
             service/k8s-demo-canary-svc created
         </code></pre>
@@ -49,7 +49,7 @@ spec:
     <div>
         <pre data-id="code-animation"><code style="font-size:1rem;" class="language-console" data-trim>
             # HTTPRoute anlegen mit Aufteilung zwischen Services 80/20
-            $ k apply -f k8s-demo-canary-httproute.yaml
+            $ k apply -f canary/k8s-demo-canary-httproute.yaml
         </code></pre>
     </div>
     <div class="fragment" style="font-size: 2rem">
